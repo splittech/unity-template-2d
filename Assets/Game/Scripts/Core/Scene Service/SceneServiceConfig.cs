@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Alchemy.Inspector;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 #endif
 
-namespace Game.Core.SceneService
+namespace Game.Core
 {
     [CreateAssetMenu(fileName = "Scene Service Config", menuName = "Game/Configs/Scene Service/Scene Service Config", order = 0)]
     public class SceneServiceConfig : ScriptableObject
@@ -20,6 +23,11 @@ namespace Game.Core.SceneService
 
         private readonly List<SceneMetaAsset> allScenes = new();
 
+        public SceneMetaAsset CoreScene => coreScene;
+        public SceneMetaAsset MainMenuScene => mainMenuScene;
+        public SceneMetaAsset GameplayScene => gameplayScene;
+        public List<SceneMetaAsset> AllScenes => allScenes.ToList();
+
         public void RecreateAllScenesList()
         {
             allScenes.Clear();
@@ -29,6 +37,26 @@ namespace Game.Core.SceneService
             allScenes.Add(gameplayScene);
 
             ValidateAllScenesList();
+        }
+
+        public List<SceneMetaAsset> GetAllScenes()
+        {
+            return allScenes.ToList();
+        }
+
+        public List<SceneMetaAsset> GetAllNonPersistentScenes()
+        {
+            return allScenes.Where(scene => !scene.Persistent && scene != coreScene).ToList();
+        }
+
+        public List<SceneMetaAsset> GetAllInitialScenes()
+        {
+            return allScenes.Where(scene => scene.Initial && scene != coreScene).ToList();
+        }
+
+        public List<SceneMetaAsset> GetAllScenesExceptCore()
+        {
+            return allScenes.Where(scene => scene != coreScene).ToList();
         }
 
         private void ValidateAllScenesList()
@@ -55,29 +83,20 @@ namespace Game.Core.SceneService
             Debug.Log("Scene list validation is successful.");
         }
 
-        public SceneMetaAsset GetCoreScene()
+#if UNITY_EDITOR
+        [Button]
+        private void OpenOnlyCoreScene()
         {
-            return coreScene;
-        }
+            RecreateAllScenesList();
 
-        public List<SceneMetaAsset> GetAllScenes()
-        {
-            return new List<SceneMetaAsset>(allScenes);
-        }
+            GetAllScenes().ForEach(sceneAsset =>
+            {
+                Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
+                EditorSceneManager.CloseScene(scene, true);
+            });
 
-        public List<SceneMetaAsset> GetAllNonPersistentScenes()
-        {
-            return allScenes.Where(scene => !scene.Persistent && scene != coreScene).ToList();
+            EditorSceneManager.OpenScene(coreScene.SceneReference.Path);
         }
-
-        public List<SceneMetaAsset> GetAllInitialScenes()
-        {
-            return allScenes.Where(scene => scene.Initial && scene != coreScene).ToList();
-        }
-
-        public List<SceneMetaAsset> GetAllScenesExceptCore()
-        {
-            return allScenes.Where(scene => scene != coreScene).ToList();
-        }
+#endif
     }
 }

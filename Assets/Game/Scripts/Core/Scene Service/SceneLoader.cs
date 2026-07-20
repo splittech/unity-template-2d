@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Core.LoadingCommon;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Game.Core.SceneService
+namespace Game.Core
 {
     public class SceneLoader
     {

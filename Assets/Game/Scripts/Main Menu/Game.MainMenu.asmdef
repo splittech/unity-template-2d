@@ -1,8 +1,11 @@
 {
-    "name": "Game.Core.LoadingCommon",
-    "rootNamespace": "Game.Core.LoadingCommon",
+    "name": "Game.MainMenu",
+    "rootNamespace": "Game.MainMenu",
     "references": [
-        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+        "R3.Unity",
+        "Game.Core",
+        "VContainer",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

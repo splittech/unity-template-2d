@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Core.LoadingCommon;
 
-namespace Game.Core.SceneService
+namespace Game.Core
 {
     public class SceneService
     {
         private readonly SceneServiceConfig config;
         private readonly SceneLoader sceneLoader;
 
-        public SceneService(SceneServiceConfig config, SceneLoader sceneLoader)
+        public SceneServiceConfig Config => config;
+
+        public SceneService(SceneServiceConfig config)
         {
             this.config = config;
-            this.sceneLoader = sceneLoader;
-
+            sceneLoader = new();
             config.RecreateAllScenesList();
         }
 
@@ -29,17 +29,6 @@ namespace Game.Core.SceneService
 
             await UnloadAllNonpersistentScenes(unloadProgress, ct);
             await sceneLoader.LoadSceneAsync(sceneAsset, loadProgress, ct);
-            progress.Report(1f);
-        }
-
-        public async UniTask LoadOnlyCoreScene(IProgress<float> progress, CancellationToken ct = default)
-        {
-            CompositeProgress compositeProgress = new(value => progress.Report(value));
-            IProgress<float> unloadProgress = compositeProgress.CreateSubProgress();
-            IProgress<float> loadProgress = compositeProgress.CreateSubProgress();
-
-            await UnloadAllScenesExceptCore(unloadProgress, ct);
-            await sceneLoader.LoadSceneAsync(config.GetCoreScene(), loadProgress, ct);
             progress.Report(1f);
         }
 

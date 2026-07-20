@@ -8,7 +8,7 @@ using UnityEditor;
 
 #endif
 
-namespace Game.Core.SceneService
+namespace Game.Core
 {
     [CreateAssetMenu(fileName = "Scene Meta Asset", menuName = "Game/Configs/Scene Service/Scene Meta Asset", order = 0)]
     public class SceneMetaAsset : ScriptableObject
