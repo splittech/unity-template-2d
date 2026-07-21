@@ -7,12 +7,11 @@ namespace Game.Core
     public class CompositeProgress
     {
         private readonly List<float> subProgressValues;
-        private readonly Action<float> onProgressChanged;
+        private readonly Action<float> handler;
 
-        public CompositeProgress(Action<float> onProgressChanged)
+        public CompositeProgress(Action<float> handler)
         {
-            this.onProgressChanged = onProgressChanged;
-
+            this.handler = handler;
             subProgressValues = new List<float>();
         }
 
@@ -21,7 +20,7 @@ namespace Game.Core
             int newIndex = subProgressValues.Count;
             subProgressValues.Add(0f);
 
-            return new Progress<float>(subValue =>
+            return new ImmediateProgress<float>(subValue =>
             {
                 subProgressValues[newIndex] = subValue;
                 RecalculateTotalProgress();
@@ -32,7 +31,7 @@ namespace Game.Core
         private void RecalculateTotalProgress()
         {
             float totalProgress = subProgressValues.Sum() / subProgressValues.Count();
-            onProgressChanged?.Invoke(totalProgress);
+            handler(totalProgress);
         }
     }
 }

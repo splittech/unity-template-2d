@@ -8,11 +8,11 @@ using UnityEngine.SceneManagement;
 
 namespace Game.Core
 {
-    public class SceneLoader
+    public class UnitySceneLoader : SceneLoader
     {
         private const float SceneReadyProgress = 0.9f;
 
-        public async UniTask LoadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
+        public override async UniTask LoadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(
                 sceneAsset.SceneReference.Name, LoadSceneMode.Additive);
@@ -44,7 +44,7 @@ namespace Game.Core
             progress.Report(1f);
         }
 
-        public UniTask UnloadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
+        public override UniTask UnloadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
             Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
 
@@ -65,7 +65,7 @@ namespace Game.Core
             return operation.ToUniTask(progress, PlayerLoopTiming.Update, ct);
         }
 
-        public List<UniTask> LoadManyScenesAsync(
+        public override List<UniTask> LoadManyScenesAsync(
             List<SceneMetaAsset> sceneAssets,
             IProgress<float> progress,
             CancellationToken ct)
@@ -79,7 +79,7 @@ namespace Game.Core
             }).ToList();
         }
 
-        public List<UniTask> UnloadManyScenesAsync(
+        public override List<UniTask> UnloadManyScenesAsync(
             List<SceneMetaAsset> sceneAssets,
             IProgress<float> progress,
             CancellationToken ct)

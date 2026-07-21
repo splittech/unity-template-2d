@@ -12,10 +12,11 @@ namespace Game.Core
 
         public SceneServiceConfig Config => config;
 
-        public SceneService(SceneServiceConfig config)
+        public SceneService(SceneServiceConfig config, SceneLoader sceneLoader)
         {
             this.config = config;
-            sceneLoader = new();
+            this.sceneLoader = sceneLoader;
+
             config.RecreateAllScenesList();
         }
 
