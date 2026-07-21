@@ -1372,9 +1372,10 @@ MonoBehaviour:
   canvasGroup: {fileID: 1746993250}
   progressDescription: {fileID: 1713674860}
   progressSlider: {fileID: 1345834488}
-  minimumShowTime: 1
-  fadeInTime: 1
-  fadeOutTime: 1
+  minimumVisibleTime: 1
+  progressAnimationTime: 0.3
+  fadeInTime: 0.3
+  fadeOutTime: 0.3
 --- !u!225 &1746993250
 CanvasGroup:
   m_ObjectHideFlags: 0

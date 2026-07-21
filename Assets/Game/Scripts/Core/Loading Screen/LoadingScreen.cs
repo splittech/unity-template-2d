@@ -9,13 +9,13 @@ namespace Game.Core
     {
         private IProgress<float> progress;
 
-        public IProgress<float> Progress => progress ??= new Progress<float>(SetProgress);
+        public IProgress<float> Progress => progress ??= new Progress<float>(UpdateProgress);
 
         public abstract UniTask Show(CancellationToken ct = default);
         public abstract UniTask Hide(CancellationToken ct = default);
         public abstract void ShowImmediate();
         public abstract void HideImmediate();
         public abstract void SetProgressDescription(string description);
-        protected abstract void SetProgress(float progress);
+        protected abstract void UpdateProgress(float progress);
     }
 }
