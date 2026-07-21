@@ -25,7 +25,7 @@ namespace Game.Core
             loadingScreen.SetProgressDescription("Startup game");
             loadingScreen.ShowImmediate();
 
-            await sceneService.LoadOnlyInitialScenes(loadingScreen.Progress, ct);
+            await sceneService.LoadInitialScenes(loadingScreen.Progress, ct);
             await loadingScreen.Hide();
         }
     }

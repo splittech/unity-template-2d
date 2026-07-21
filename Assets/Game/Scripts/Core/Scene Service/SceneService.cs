@@ -33,18 +33,7 @@ namespace Game.Core
             progress.Report(1f);
         }
 
-        public async UniTask LoadOnlyInitialScenes(IProgress<float> progress, CancellationToken ct = default)
-        {
-            CompositeProgress compositeProgress = new(value => progress.Report(value));
-            IProgress<float> unloadProgress = compositeProgress.CreateSubProgress();
-            IProgress<float> loadProgress = compositeProgress.CreateSubProgress();
-
-            await UnloadAllScenesExceptCore(unloadProgress, ct);
-            await LoadInitialScenes(loadProgress, ct);
-            progress.Report(1f);
-        }
-
-        private async UniTask LoadInitialScenes(IProgress<float> progress, CancellationToken ct = default)
+        public async UniTask LoadInitialScenes(IProgress<float> progress, CancellationToken ct = default)
         {
             List<SceneMetaAsset> scenesToLoad = config.GetAllInitialScenes();
             List<UniTask> tasks = sceneLoader.LoadManyScenesAsync(scenesToLoad, progress, ct);
