@@ -1,0 +1,24 @@
+{
+    "name": "Game.Core",
+    "rootNamespace": "Game.Core",
+    "references": [
+        "Unity.TextMeshPro",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "UniTask",
+        "UniTask.DOTween",
+        "VContainer",
+        "Alchemy",
+        "DOTween.Modules",
+        "Eflatun.SceneReference"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
