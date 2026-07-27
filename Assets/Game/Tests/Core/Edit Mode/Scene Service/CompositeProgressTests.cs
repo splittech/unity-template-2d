@@ -11,7 +11,8 @@ namespace Game.Core.EditModeTests
             float result = -1f;
 
             var composite = new CompositeProgress(
-                value => result = value,
+                handler: value => result = value,
+                autoEnableUpdate: true,
                 subProgressFactory: h => new ImmediateProgress<float>(h));
 
             IProgress<float> first = composite.CreateSubProgress();
@@ -29,7 +30,8 @@ namespace Game.Core.EditModeTests
             float result = -1f;
 
             var composite = new CompositeProgress(
-                value => result = value,
+                handler: value => result = value,
+                autoEnableUpdate: true,
                 subProgressFactory: h => new ImmediateProgress<float>(h));
 
             IProgress<float> first = composite.CreateSubProgress();

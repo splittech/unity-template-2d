@@ -3,12 +3,14 @@
     "rootNamespace": "Game.Core",
     "references": [
         "Unity.TextMeshPro",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
         "UniTask",
         "UniTask.DOTween",
         "VContainer",
         "Alchemy",
-        "Eflatun.SceneReference",
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "Eflatun.SceneReference"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
