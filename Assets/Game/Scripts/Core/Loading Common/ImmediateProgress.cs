@@ -4,16 +4,16 @@ namespace Game.Core
 {
     public class ImmediateProgress<T> : IProgress<T>
     {
-        private readonly Action<T> handler;
+        private readonly Action<T> _handler;
 
         public ImmediateProgress(Action<T> handler)
         {
-            this.handler = handler;
+            _handler = handler;
         }
 
         public void Report(T value)
         {
-            handler(value);
+            _handler(value);
         }
     }
 }

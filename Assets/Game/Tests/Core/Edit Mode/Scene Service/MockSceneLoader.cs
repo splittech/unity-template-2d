@@ -54,10 +54,7 @@ namespace Game.Core.EditModeTests
                 new(progress.Report);
 
             return scenes
-                .Select(scene => LoadSceneAsync(
-                    scene,
-                    composite.CreateSubProgress(),
-                    ct))
+                .Select(scene => LoadSceneAsync(scene, composite.CreateSubProgress(), ct))
                 .ToList();
         }
 
@@ -70,10 +67,7 @@ namespace Game.Core.EditModeTests
                 new(progress.Report);
 
             return scenes
-                .Select(scene => UnloadSceneAsync(
-                    scene,
-                    composite.CreateSubProgress(),
-                    ct))
+                .Select(scene => UnloadSceneAsync(scene, composite.CreateSubProgress(), ct))
                 .ToList();
         }
     }

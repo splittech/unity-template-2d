@@ -13,13 +13,13 @@ namespace Game.Core
     [CreateAssetMenu(fileName = "Scene Meta Asset", menuName = "Game/Configs/Scene Service/Scene Meta Asset", order = 0)]
     public class SceneMetaAsset : ScriptableObject
     {
-        [SerializeField] private SceneReference sceneReference;
-        [SerializeField] private bool initial;
-        [SerializeField] private bool persistent;
+        [SerializeField] private SceneReference _sceneReference;
+        [SerializeField] private bool _initial;
+        [SerializeField] private bool _persistent;
 
-        public SceneReference SceneReference => sceneReference;
-        public bool Initial => initial;
-        public bool Persistent => persistent;
+        public SceneReference SceneReference => _sceneReference;
+        public bool Initial => _initial;
+        public bool Persistent => _persistent;
 
         public static void Validate(SceneMetaAsset sceneAsset)
         {
@@ -30,7 +30,7 @@ namespace Game.Core
 #if UNITY_EDITOR
             editorMessage = $" Asset path: {AssetDatabase.GetAssetPath(sceneAsset)}";
 #endif
-            if (sceneAsset.sceneReference == null)
+            if (sceneAsset._sceneReference == null)
             {
                 string message = "Scene asset has no scene reference.";
                 throw new InvalidOperationException(message + editorMessage);

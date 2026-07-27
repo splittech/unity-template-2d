@@ -7,9 +7,8 @@ namespace Game.Core
 {
     public abstract class LoadingScreen : MonoBehaviour
     {
-        private IProgress<float> progress;
-
-        public IProgress<float> Progress => progress ??= new Progress<float>(UpdateProgress);
+        private IProgress<float> _progress;
+        public IProgress<float> Progress => _progress ??= new Progress<float>(UpdateProgress);
 
         public abstract UniTask Show(CancellationToken ct = default);
         public abstract UniTask Hide(CancellationToken ct = default);

@@ -17,46 +17,46 @@ namespace Game.Core
     [CreateAssetMenu(fileName = "Scene Service Config", menuName = "Game/Configs/Scene Service/Scene Service Config", order = 0)]
     public class SceneServiceConfig : ScriptableObject
     {
-        [SerializeField] private SceneMetaAsset coreScene;
-        [SerializeField] private SceneMetaAsset mainMenuScene;
-        [SerializeField] private SceneMetaAsset gameplayScene;
+        [SerializeField] private SceneMetaAsset _coreScene;
+        [SerializeField] private SceneMetaAsset _mainMenuScene;
+        [SerializeField] private SceneMetaAsset _gameplayScene;
 
-        private readonly List<SceneMetaAsset> allScenes = new();
+        private readonly List<SceneMetaAsset> _allScenes = new();
 
-        public SceneMetaAsset CoreScene => coreScene;
-        public SceneMetaAsset MainMenuScene => mainMenuScene;
-        public SceneMetaAsset GameplayScene => gameplayScene;
-        public List<SceneMetaAsset> AllScenes => allScenes.ToList();
+        public SceneMetaAsset CoreScene => _coreScene;
+        public SceneMetaAsset MainMenuScene => _mainMenuScene;
+        public SceneMetaAsset GameplayScene => _gameplayScene;
+        public List<SceneMetaAsset> AllScenes => _allScenes.ToList();
 
         public void RecreateAllScenesList()
         {
-            allScenes.Clear();
+            _allScenes.Clear();
 
-            allScenes.Add(coreScene);
-            allScenes.Add(mainMenuScene);
-            allScenes.Add(gameplayScene);
+            _allScenes.Add(_coreScene);
+            _allScenes.Add(_mainMenuScene);
+            _allScenes.Add(_gameplayScene);
 
             ValidateAllScenesList();
         }
 
         public List<SceneMetaAsset> GetAllScenes()
         {
-            return allScenes.ToList();
+            return _allScenes.ToList();
         }
 
         public List<SceneMetaAsset> GetAllNonPersistentScenes()
         {
-            return allScenes.Where(scene => !scene.Persistent && scene != coreScene).ToList();
+            return _allScenes.Where(scene => !scene.Persistent && scene != _coreScene).ToList();
         }
 
         public List<SceneMetaAsset> GetAllInitialScenes()
         {
-            return allScenes.Where(scene => scene.Initial && scene != coreScene).ToList();
+            return _allScenes.Where(scene => scene.Initial && scene != _coreScene).ToList();
         }
 
         public List<SceneMetaAsset> GetAllScenesExceptCore()
         {
-            return allScenes.Where(scene => scene != coreScene).ToList();
+            return _allScenes.Where(scene => scene != _coreScene).ToList();
         }
 
         private void ValidateAllScenesList()
@@ -67,14 +67,14 @@ namespace Game.Core
 #endif
             try
             {
-                allScenes.ForEach(scene => SceneMetaAsset.Validate(scene));
+                _allScenes.ForEach(scene => SceneMetaAsset.Validate(scene));
             }
             catch (InvalidOperationException ex)
             {
                 throw new InvalidOperationException(ex.Message + editorMessage);
             }
 
-            if (allScenes.Distinct().Count() != allScenes.Count)
+            if (_allScenes.Distinct().Count() != _allScenes.Count)
             {
                 string message = "Scene list contains duplicates.";
                 throw new InvalidOperationException(message + editorMessage);
@@ -95,7 +95,7 @@ namespace Game.Core
                 EditorSceneManager.CloseScene(scene, true);
             });
 
-            EditorSceneManager.OpenScene(coreScene.SceneReference.Path);
+            EditorSceneManager.OpenScene(_coreScene.SceneReference.Path);
         }
 #endif
     }

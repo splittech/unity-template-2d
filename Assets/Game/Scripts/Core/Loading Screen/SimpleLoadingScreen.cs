@@ -10,20 +10,20 @@ using UnityEngine.UI;
 public sealed class SimpleLoadingScreen : LoadingScreen
 {
     [Header("Components")]
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private TMP_Text progressDescription;
-    [SerializeField] private Slider progressSlider;
+    [SerializeField] private CanvasGroup _canvasGroup;
+    [SerializeField] private TMP_Text _progressDescription;
+    [SerializeField] private Slider _progressSlider;
 
     [Header("Parameters")]
-    [SerializeField] private float minimumVisibleTime = 1f;
-    [SerializeField] private float progressAnimationTime = 0.3f;
-    [SerializeField] private float fadeInTime = 0.3f;
-    [SerializeField] private float fadeOutTime = 0.3f;
+    [SerializeField] private float _minimumVisibleTime = 1f;
+    [SerializeField] private float _progressAnimationTime = 0.3f;
+    [SerializeField] private float _fadeInTime = 0.3f;
+    [SerializeField] private float _fadeOutTime = 0.3f;
 
-    private Tween fadeTween;
-    private Tween progressTween;
-    private double shownAt;
-    private float targetProgress;
+    private Tween _fadeTween;
+    private Tween _progressTween;
+    private double _shownAt;
+    private float _targetProgress;
 
     public override async UniTask Show(CancellationToken ct = default)
     {
@@ -31,14 +31,14 @@ public sealed class SimpleLoadingScreen : LoadingScreen
 
         await FadeTo(
             targetAlpha: 1f,
-            duration: fadeInTime,
+            duration: _fadeInTime,
             ct);
     }
 
     public override void ShowImmediate()
     {
         PrepareToShow();
-        canvasGroup.alpha = 1f;
+        _canvasGroup.alpha = 1f;
     }
 
     public override async UniTask Hide(CancellationToken ct = default)
@@ -46,72 +46,72 @@ public sealed class SimpleLoadingScreen : LoadingScreen
         await WaitForMinimumShowTime(ct);
         await CompleteProgress(ct);
 
-        canvasGroup.blocksRaycasts = false;
+        _canvasGroup.blocksRaycasts = false;
 
         await FadeTo(
             targetAlpha: 0f,
-            duration: fadeOutTime,
+            duration: _fadeOutTime,
             ct);
 
-        canvasGroup.gameObject.SetActive(false);
+        _canvasGroup.gameObject.SetActive(false);
     }
 
     public override void HideImmediate()
     {
         KillAnimations();
 
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.gameObject.SetActive(false);
+        _canvasGroup.alpha = 0f;
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
+        _canvasGroup.gameObject.SetActive(false);
 
-        targetProgress = 0f;
-        progressSlider.value = 0f;
+        _targetProgress = 0f;
+        _progressSlider.value = 0f;
     }
 
     public override void SetProgressDescription(string description)
     {
-        progressDescription.text = description;
+        _progressDescription.text = description;
     }
 
     protected override void UpdateProgress(float progress)
     {
         float normalizedProgress = Mathf.Clamp01(progress);
 
-        targetProgress = Mathf.Max(targetProgress, normalizedProgress);
+        _targetProgress = Mathf.Max(_targetProgress, normalizedProgress);
 
-        AnimateProgressTo(targetProgress);
+        AnimateProgressTo(_targetProgress);
     }
 
     private void PrepareToShow()
     {
         KillAnimations();
 
-        shownAt = Time.realtimeSinceStartupAsDouble;
-        targetProgress = 0f;
+        _shownAt = Time.realtimeSinceStartupAsDouble;
+        _targetProgress = 0f;
 
-        progressSlider.value = 0f;
+        _progressSlider.value = 0f;
 
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.gameObject.SetActive(true);
+        _canvasGroup.alpha = 0f;
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = true;
+        _canvasGroup.gameObject.SetActive(true);
     }
 
     private void AnimateProgressTo(float target)
     {
-        progressTween?.Kill();
+        _progressTween?.Kill();
 
-        float distance = Mathf.Abs(target - progressSlider.value);
-        float duration = progressAnimationTime * distance;
+        float distance = Mathf.Abs(target - _progressSlider.value);
+        float duration = _progressAnimationTime * distance;
 
         if (duration <= 0f)
         {
-            progressSlider.value = target;
+            _progressSlider.value = target;
             return;
         }
 
-        progressTween = progressSlider
+        _progressTween = _progressSlider
             .DOValue(target, duration)
             .SetEase(Ease.Linear)
             .SetUpdate(true);
@@ -119,23 +119,23 @@ public sealed class SimpleLoadingScreen : LoadingScreen
 
     private async UniTask CompleteProgress(CancellationToken ct)
     {
-        progressTween?.Kill();
+        _progressTween?.Kill();
 
-        float distance = 1f - progressSlider.value;
-        float duration = progressAnimationTime * distance;
+        float distance = 1f - _progressSlider.value;
+        float duration = _progressAnimationTime * distance;
 
         if (duration <= 0f)
         {
-            progressSlider.value = 1f;
+            _progressSlider.value = 1f;
             return;
         }
 
-        Tween currentTween = progressSlider
+        Tween currentTween = _progressSlider
             .DOValue(1f, duration)
             .SetEase(Ease.Linear)
             .SetUpdate(true);
 
-        progressTween = currentTween;
+        _progressTween = currentTween;
 
         try
         {
@@ -143,21 +143,21 @@ public sealed class SimpleLoadingScreen : LoadingScreen
         }
         finally
         {
-            if (progressTween == currentTween)
-                progressTween = null;
+            if (_progressTween == currentTween)
+                _progressTween = null;
         }
 
-        targetProgress = 1f;
-        progressSlider.value = 1f;
+        _targetProgress = 1f;
+        _progressSlider.value = 1f;
     }
 
     private async UniTask WaitForMinimumShowTime(CancellationToken ct)
     {
         double elapsed =
-            Time.realtimeSinceStartupAsDouble - shownAt;
+            Time.realtimeSinceStartupAsDouble - _shownAt;
 
         double remaining =
-            minimumVisibleTime - elapsed;
+            _minimumVisibleTime - elapsed;
 
         if (remaining <= 0)
             return;
@@ -173,19 +173,19 @@ public sealed class SimpleLoadingScreen : LoadingScreen
         float duration,
         CancellationToken ct)
     {
-        fadeTween?.Kill();
+        _fadeTween?.Kill();
 
         if (duration <= 0f)
         {
-            canvasGroup.alpha = targetAlpha;
+            _canvasGroup.alpha = targetAlpha;
             return;
         }
 
-        Tween currentTween = canvasGroup
+        Tween currentTween = _canvasGroup
             .DOFade(targetAlpha, duration)
             .SetUpdate(true);
 
-        fadeTween = currentTween;
+        _fadeTween = currentTween;
 
         try
         {
@@ -193,18 +193,18 @@ public sealed class SimpleLoadingScreen : LoadingScreen
         }
         finally
         {
-            if (fadeTween == currentTween)
-                fadeTween = null;
+            if (_fadeTween == currentTween)
+                _fadeTween = null;
         }
     }
 
     private void KillAnimations()
     {
-        fadeTween?.Kill();
-        progressTween?.Kill();
+        _fadeTween?.Kill();
+        _progressTween?.Kill();
 
-        fadeTween = null;
-        progressTween = null;
+        _fadeTween = null;
+        _progressTween = null;
     }
 
     private void OnDestroy()

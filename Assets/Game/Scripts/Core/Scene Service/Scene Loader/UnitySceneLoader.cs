@@ -10,7 +10,10 @@ namespace Game.Core
 {
     public class UnitySceneLoader : SceneLoader
     {
-        private const float SceneReadyProgress = 0.9f;
+        /// <summary>
+        /// Loading scene in unity is considered done at 90%.
+        /// </summary>
+        private const float UnitySceneReadyProgress = 0.9f;
 
         public override async UniTask LoadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
@@ -28,9 +31,9 @@ namespace Game.Core
                 while (!operation.isDone)
                 {
                     progress.Report(
-                        Mathf.Clamp01(operation.progress / SceneReadyProgress));
+                        Mathf.Clamp01(operation.progress / UnitySceneReadyProgress));
 
-                    if (operation.progress >= SceneReadyProgress)
+                    if (operation.progress >= UnitySceneReadyProgress)
                         operation.allowSceneActivation = true;
 
                     await UniTask.Yield(PlayerLoopTiming.Update, ct);

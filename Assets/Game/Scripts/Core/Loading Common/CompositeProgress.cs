@@ -1,37 +1,75 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace Game.Core
 {
-    public class CompositeProgress
+    public class CompositeProgress : IProgress<float>
     {
-        private readonly List<float> subProgressValues;
-        private readonly Action<float> handler;
+        private readonly Action<float> _handler;
+        private readonly Func<Action<float>, IProgress<float>> _subProgressFactory;
 
-        public CompositeProgress(Action<float> handler)
+        private readonly List<float> _subProgressValues;
+        private readonly List<float> _subProgressWeights;
+
+        private float _subValuesSum;
+        private float _subWeightsSum;
+        private bool _updateEnabled;
+
+        public CompositeProgress(
+            Action<float> handler,
+            bool autoEnableUpdate = false,
+            Func<Action<float>, IProgress<float>> subProgressFactory = null)
         {
-            this.handler = handler;
-            subProgressValues = new List<float>();
+            _handler = handler;
+            _updateEnabled = autoEnableUpdate;
+
+            _subProgressFactory = subProgressFactory ?? (h => new Progress<float>(h));
+
+            _subProgressValues = new List<float>();
+            _subProgressWeights = new List<float>();
         }
 
-        public IProgress<float> CreateSubProgress()
+        /// <summary>
+        /// Do not use. Should be updated using only sub progresses.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <exception cref="NotSupportedException"></exception>
+        void IProgress<float>.Report(float value) =>
+            throw new NotSupportedException(
+                $"{nameof(CompositeProgress)} aggregates only sub-progresses created via {nameof(CreateSubProgress)}.");
+
+        public IProgress<float> CreateSubProgress(float weight = 1)
         {
-            int newIndex = subProgressValues.Count;
-            subProgressValues.Add(0f);
+            weight = weight > 0f ? weight : 0f;
 
-            return new ImmediateProgress<float>(subValue =>
-            {
-                subProgressValues[newIndex] = subValue;
-                RecalculateTotalProgress();
-            });
+            int subIndex = _subProgressValues.Count;
 
+            _subProgressValues.Add(0f);
+            _subProgressWeights.Add(weight);
+
+            _subWeightsSum += weight;
+
+            return _subProgressFactory(subValue => RecalculateTotalProgress(subIndex, subValue));
         }
 
-        private void RecalculateTotalProgress()
+        public void EnableUpdate()
         {
-            float totalProgress = subProgressValues.Sum() / subProgressValues.Count();
-            handler(totalProgress);
+            _updateEnabled = true;
+            _handler(_subWeightsSum > 0 ? _subValuesSum / _subWeightsSum : 0f);
+        }
+
+        private void RecalculateTotalProgress(int subIndex, float subValue)
+        {
+            subValue = Mathf.Clamp01(subValue);
+
+            _subValuesSum += (subValue - _subProgressValues[subIndex]) * _subProgressWeights[subIndex];
+            _subProgressValues[subIndex] = subValue;
+
+            if (!_updateEnabled)
+                return;
+
+            _handler(_subWeightsSum > 0 ? _subValuesSum / _subWeightsSum : 0f);
         }
     }
 }

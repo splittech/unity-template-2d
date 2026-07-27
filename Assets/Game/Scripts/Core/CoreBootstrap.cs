@@ -6,13 +6,13 @@ namespace Game.Core
 {
     public class CoreBootstrap : IInitializable
     {
-        private readonly LoadingScreen loadingScreen;
-        private readonly SceneService sceneService;
+        private readonly LoadingScreen _loadingScreen;
+        private readonly SceneService _sceneService;
 
         public CoreBootstrap(SceneService sceneService, LoadingScreen loadingScreen)
         {
-            this.sceneService = sceneService;
-            this.loadingScreen = loadingScreen;
+            _sceneService = sceneService;
+            _loadingScreen = loadingScreen;
         }
 
         public void Initialize()
@@ -22,11 +22,11 @@ namespace Game.Core
 
         public async UniTask InitializeAsync(CancellationToken ct = default)
         {
-            loadingScreen.SetProgressDescription("Startup game");
-            loadingScreen.ShowImmediate();
+            _loadingScreen.SetProgressDescription("Startup game");
+            _loadingScreen.ShowImmediate();
 
-            await sceneService.LoadInitialScenes(loadingScreen.Progress, ct);
-            await loadingScreen.Hide();
+            await _sceneService.LoadInitialScenes(_loadingScreen.Progress, ct);
+            await _loadingScreen.Hide();
         }
     }
 }

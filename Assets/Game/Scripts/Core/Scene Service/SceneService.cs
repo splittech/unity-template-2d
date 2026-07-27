@@ -7,15 +7,15 @@ namespace Game.Core
 {
     public class SceneService
     {
-        private readonly SceneServiceConfig config;
-        private readonly SceneLoader sceneLoader;
+        private readonly SceneServiceConfig _config;
+        private readonly SceneLoader _sceneLoader;
 
-        public SceneServiceConfig Config => config;
+        public SceneServiceConfig Config => _config;
 
         public SceneService(SceneServiceConfig config, SceneLoader sceneLoader)
         {
-            this.config = config;
-            this.sceneLoader = sceneLoader;
+            _config = config;
+            _sceneLoader = sceneLoader;
 
             config.RecreateAllScenesList();
         }
@@ -29,14 +29,14 @@ namespace Game.Core
             IProgress<float> loadProgress = compositeProgress.CreateSubProgress();
 
             await UnloadAllNonpersistentScenes(unloadProgress, ct);
-            await sceneLoader.LoadSceneAsync(sceneAsset, loadProgress, ct);
+            await _sceneLoader.LoadSceneAsync(sceneAsset, loadProgress, ct);
             progress.Report(1f);
         }
 
         public async UniTask LoadInitialScenes(IProgress<float> progress, CancellationToken ct = default)
         {
-            List<SceneMetaAsset> scenesToLoad = config.GetAllInitialScenes();
-            List<UniTask> tasks = sceneLoader.LoadManyScenesAsync(scenesToLoad, progress, ct);
+            List<SceneMetaAsset> scenesToLoad = _config.GetAllInitialScenes();
+            List<UniTask> tasks = _sceneLoader.LoadManyScenesAsync(scenesToLoad, progress, ct);
 
             await UniTask.WhenAll(tasks);
             progress.Report(1f);
@@ -44,8 +44,8 @@ namespace Game.Core
 
         private async UniTask UnloadAllNonpersistentScenes(IProgress<float> progress, CancellationToken ct = default)
         {
-            List<SceneMetaAsset> scenesToUnload = config.GetAllNonPersistentScenes();
-            List<UniTask> tasks = sceneLoader.UnloadManyScenesAsync(scenesToUnload, progress, ct);
+            List<SceneMetaAsset> scenesToUnload = _config.GetAllNonPersistentScenes();
+            List<UniTask> tasks = _sceneLoader.UnloadManyScenesAsync(scenesToUnload, progress, ct);
 
             await UniTask.WhenAll(tasks);
             progress.Report(1f);
@@ -53,8 +53,8 @@ namespace Game.Core
 
         private async UniTask UnloadAllScenesExceptCore(IProgress<float> progress, CancellationToken ct = default)
         {
-            List<SceneMetaAsset> scenesToUnload = config.GetAllScenesExceptCore();
-            List<UniTask> tasks = sceneLoader.UnloadManyScenesAsync(scenesToUnload, progress, ct);
+            List<SceneMetaAsset> scenesToUnload = _config.GetAllScenesExceptCore();
+            List<UniTask> tasks = _sceneLoader.UnloadManyScenesAsync(scenesToUnload, progress, ct);
 
             await UniTask.WhenAll(tasks);
             progress.Report(1f);
