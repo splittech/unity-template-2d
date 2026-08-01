@@ -1369,13 +1369,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3a51cf8653ba1d4d8a7cb8ef2a92965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Core::SimpleLoadingScreen
-  canvasGroup: {fileID: 1746993250}
-  progressDescription: {fileID: 1713674860}
-  progressSlider: {fileID: 1345834488}
-  minimumVisibleTime: 2
-  progressAnimationTime: 2
-  fadeInTime: 0.3
-  fadeOutTime: 0.3
+  _canvasGroup: {fileID: 0}
+  _progressDescription: {fileID: 0}
+  _progressSlider: {fileID: 0}
+  _minimumVisibleTime: 1
+  _progressAnimationTime: 0.3
+  _fadeInTime: 0.3
+  _fadeOutTime: 0.3
 --- !u!225 &1746993250
 CanvasGroup:
   m_ObjectHideFlags: 0

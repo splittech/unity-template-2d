@@ -24,6 +24,10 @@ namespace Game.Core
             builder.RegisterInstance(sceneServiceConfig);
             builder.Register<SceneLoader, UnitySceneLoader>(Lifetime.Singleton);
             builder.Register<SceneService>(Lifetime.Singleton);
+
+            // Addressables Service
+            builder.Register<AddressablesLoader>(Lifetime.Singleton);
+            builder.Register<AddressablesService>(Lifetime.Singleton);
         }
 
     }
