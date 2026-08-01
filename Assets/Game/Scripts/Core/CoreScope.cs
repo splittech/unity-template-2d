@@ -26,7 +26,7 @@ namespace Game.Core
             builder.Register<SceneService>(Lifetime.Singleton);
 
             // Addressables Service
-            builder.Register<AddressablesLoader>(Lifetime.Singleton);
+            builder.Register<IAddressablesLoader, AddressablesLoader>(Lifetime.Singleton);
             builder.Register<AddressablesService>(Lifetime.Singleton);
         }
 

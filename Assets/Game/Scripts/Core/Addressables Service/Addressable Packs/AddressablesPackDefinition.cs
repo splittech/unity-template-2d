@@ -14,5 +14,15 @@ namespace Game.Core
         public string Id => _id;
         public string DownloadLabel => _downloadLabel?.labelString;
         public AddressablesPackReference Pack => _pack;
+
+        public AddressablesPackDefinition(
+            string id,
+            AssetLabelReference downloadLabel,
+            AddressablesPackReference pack)
+        {
+            _id = id;
+            _downloadLabel = downloadLabel;
+            _pack = pack;
+        }
     }
 }

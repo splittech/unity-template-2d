@@ -1,10 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Game.Core.Tests.Mocks;
 using Game.Tests.Common;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
-namespace Game.Core.EditModeTests
+namespace Game.Core.Tests.Editor
 {
     public class SceneServiceTests
     {

@@ -1,15 +1,19 @@
 {
-    "name": "Game.Tests.Core.Runtime",
-    "rootNamespace": "Game.Tests.Core.Runtime",
+    "name": "Game.Core.Tests.Editor",
+    "rootNamespace": "Game.Core.Tests.Editor",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Game.Tests.Common",
+        "Unity.ResourceManager",
+        "Unity.Addressables",
         "UniTask",
-        "Eflatun.SceneReference",
-        "Game.Core"
+        "Game.Tests.Common",
+        "Game.Core",
+        "Game.Core.Tests.Mocks"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -6,9 +6,9 @@ using NUnit.Framework;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-namespace Game.Core.PlayModeTests
+namespace Game.Core.Tests.PlayMode
 {
-    public sealed class UnitySceneLoaderTests
+    public class UnitySceneLoaderTests
     {
         private SceneMetaAsset testScene;
         private UnitySceneLoader loader;

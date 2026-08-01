@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace Game.Core.EditModeTests
+namespace Game.Core.Tests.Mocks
 {
-    public sealed class MockSceneLoader : SceneLoader
+    public class MockSceneLoader : SceneLoader
     {
         public readonly List<SceneMetaAsset> LoadCalls = new();
         public readonly List<SceneMetaAsset> UnloadCalls = new();

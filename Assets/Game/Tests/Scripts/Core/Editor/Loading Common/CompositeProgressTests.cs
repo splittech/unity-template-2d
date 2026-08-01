@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace Game.Core.EditModeTests
+namespace Game.Core.Tests.Editor
 {
     public class CompositeProgressTests
     {
