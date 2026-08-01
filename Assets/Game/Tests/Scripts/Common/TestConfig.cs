@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game.Tests.Common
 {
     [CreateAssetMenu(fileName = "Tests Config", menuName = "Game/Tests/Tests Config", order = 0)]
-    public class TestsConfig : ScriptableObject
+    public class TestConfig : ScriptableObject
     {
         private const string TestsConfigAssetPath = "Assets/Game/Tests/Configs/Tests Config.asset";
 
@@ -13,9 +13,9 @@ namespace Game.Tests.Common
 
         public SceneServiceConfig SceneServiceConfig => sceneServiceConfig;
 
-        public static TestsConfig Get()
+        public static TestConfig Get()
         {
-            return AssetDatabase.LoadAssetAtPath<TestsConfig>(TestsConfigAssetPath);
+            return AssetDatabase.LoadAssetAtPath<TestConfig>(TestsConfigAssetPath);
         }
     }
 }

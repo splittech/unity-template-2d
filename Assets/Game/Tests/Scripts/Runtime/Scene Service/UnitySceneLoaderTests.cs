@@ -16,7 +16,7 @@ namespace Game.Core.PlayModeTests
         [SetUp]
         public void SetUp()
         {
-            testScene = TestsConfig.Get().SceneServiceConfig.CoreScene;
+            testScene = TestConfig.Get().SceneServiceConfig.CoreScene;
 
             Assert.That(testScene, Is.Not.Null);
 

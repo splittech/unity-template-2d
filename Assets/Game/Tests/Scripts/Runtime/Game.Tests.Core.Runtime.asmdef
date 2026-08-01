@@ -1,6 +1,6 @@
 {
-    "name": "Game.Core.PlayModeTests",
-    "rootNamespace": "Game.Core.PlayModeTests",
+    "name": "Game.Tests.Core.Runtime",
+    "rootNamespace": "Game.Tests.Core.Runtime",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

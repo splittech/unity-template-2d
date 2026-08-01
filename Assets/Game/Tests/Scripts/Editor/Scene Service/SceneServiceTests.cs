@@ -13,7 +13,7 @@ namespace Game.Core.EditModeTests
         [SetUp]
         public void SetUp()
         {
-            sceneServiceConfig = TestsConfig.Get().SceneServiceConfig;
+            sceneServiceConfig = TestConfig.Get().SceneServiceConfig;
         }
 
         [Test]
