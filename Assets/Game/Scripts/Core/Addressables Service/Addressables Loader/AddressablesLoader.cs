@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Game.Core
 {
-    public sealed class AddressablesLoader
+    public class AddressablesLoader : IAddressablesLoader
     {
         public async UniTask<long> GetDownloadSizeAsync(
             string key,

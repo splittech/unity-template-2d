@@ -6,9 +6,9 @@ namespace Game.Core
 {
     public class AddressablesService
     {
-        private readonly AddressablesLoader _addressablesLoader;
+        private readonly IAddressablesLoader _addressablesLoader;
 
-        public AddressablesService(AddressablesLoader addressablesLoader)
+        public AddressablesService(IAddressablesLoader addressablesLoader)
         {
             _addressablesLoader = addressablesLoader;
         }
