@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Core.Tests.Mocks;
+using Game.Core.Tests.Doubles;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -22,10 +22,10 @@ namespace Game.Core.Tests.PlayMode
 
         private AddressablesLoader loader;
         private AddressablesPackReference reference;
-        private MockAddressableAsset asset;
+        private FakeAddressableAsset asset;
         private TestAssetProvider provider;
         private TestResourceLocator locator;
-        private LoadedAddressable<MockAddressableAsset> loadedAddressable;
+        private LoadedAddressable<FakeAddressableAsset> loadedAddressable;
 
         [UnitySetUp]
         public IEnumerator SetUp()
@@ -34,7 +34,7 @@ namespace Game.Core.Tests.PlayMode
             // but keeps this test independent from a built content catalog.
             loader = new AddressablesLoader();
             reference = new AddressablesPackReference(AssetGuid);
-            asset = ScriptableObject.CreateInstance<MockAddressableAsset>();
+            asset = ScriptableObject.CreateInstance<FakeAddressableAsset>();
             provider = new TestAssetProvider(asset);
             locator = new TestResourceLocator(LocatorId, AssetGuid, provider.ProviderId);
 
@@ -79,7 +79,7 @@ namespace Game.Core.Tests.PlayMode
         {
             return UniTask.ToCoroutine(async () =>
             {
-                loadedAddressable = await loader.LoadAsync<MockAddressableAsset>(
+                loadedAddressable = await loader.LoadAsync<FakeAddressableAsset>(
                     reference,
                     progress: null,
                     CancellationToken.None);
@@ -98,7 +98,7 @@ namespace Game.Core.Tests.PlayMode
                 IProgress<float> progress = new ImmediateProgress<float>(
                     value => progressValue = value);
 
-                loadedAddressable = await loader.LoadAsync<MockAddressableAsset>(
+                loadedAddressable = await loader.LoadAsync<FakeAddressableAsset>(
                     reference,
                     progress,
                     CancellationToken.None);
@@ -109,9 +109,9 @@ namespace Game.Core.Tests.PlayMode
 
         private class TestAssetProvider : ResourceProviderBase
         {
-            private readonly MockAddressableAsset asset;
+            private readonly FakeAddressableAsset asset;
 
-            public TestAssetProvider(MockAddressableAsset asset)
+            public TestAssetProvider(FakeAddressableAsset asset)
             {
                 this.asset = asset;
                 m_ProviderId = $"{GetType().FullName}.{Guid.NewGuid():N}";
@@ -145,7 +145,7 @@ namespace Game.Core.Tests.PlayMode
                         key,
                         key,
                         providerId,
-                        typeof(MockAddressableAsset))
+                        typeof(FakeAddressableAsset))
                 };
             }
 
@@ -155,7 +155,7 @@ namespace Game.Core.Tests.PlayMode
                 out IList<IResourceLocation> result)
             {
                 if (Equals(requestedKey, key) &&
-                    (type == null || type.IsAssignableFrom(typeof(MockAddressableAsset))))
+                    (type == null || type.IsAssignableFrom(typeof(FakeAddressableAsset))))
                 {
                     result = locations;
                     return true;

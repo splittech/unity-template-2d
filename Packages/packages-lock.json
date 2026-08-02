@@ -23,6 +23,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.cysharp.zlinq": {
+      "version": "1.5.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.eflatun.scenereference": {
       "version": "5.0.0",
       "depth": 0,

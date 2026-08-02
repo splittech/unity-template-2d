@@ -1,15 +1,10 @@
 {
-    "name": "Game.Core.Tests.PlayMode",
-    "rootNamespace": "Game.Core.Tests.PlayMode",
+    "name": "Game.Core.Tests.Doubles",
+    "rootNamespace": "Game.Core.Tests.Doubles",
     "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "Unity.ResourceManager",
-        "Unity.Addressables",
         "UniTask",
-        "Eflatun.SceneReference",
-        "Game.Core",
-        "Game.Core.Tests.Doubles"
+        "Unity.Addressables",
+        "Game.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -8,14 +8,14 @@ using UnityEngine.SceneManagement;
 
 namespace Game.Core
 {
-    public class UnitySceneLoader : SceneLoader
+    public class SceneLoader : ISceneLoader
     {
         /// <summary>
         /// Loading scene in unity is considered done at 90%.
         /// </summary>
         private const float UnitySceneReadyProgress = 0.9f;
 
-        public override async UniTask LoadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
+        public async UniTask LoadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(
                 sceneAsset.SceneReference.Name, LoadSceneMode.Additive);
@@ -47,7 +47,7 @@ namespace Game.Core
             progress.Report(1f);
         }
 
-        public override UniTask UnloadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
+        public UniTask UnloadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
             Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
 
@@ -68,7 +68,7 @@ namespace Game.Core
             return operation.ToUniTask(progress, PlayerLoopTiming.Update, ct);
         }
 
-        public override List<UniTask> LoadManyScenesAsync(
+        public List<UniTask> LoadManyScenesAsync(
             List<SceneMetaAsset> sceneAssets,
             IProgress<float> progress,
             CancellationToken ct)
@@ -82,7 +82,7 @@ namespace Game.Core
             }).ToList();
         }
 
-        public override List<UniTask> UnloadManyScenesAsync(
+        public List<UniTask> UnloadManyScenesAsync(
             List<SceneMetaAsset> sceneAssets,
             IProgress<float> progress,
             CancellationToken ct)

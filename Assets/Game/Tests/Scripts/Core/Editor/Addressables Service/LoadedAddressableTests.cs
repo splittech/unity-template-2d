@@ -1,5 +1,5 @@
 using System;
-using Game.Core.Tests.Mocks;
+using Game.Core.Tests.Doubles;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -16,7 +16,7 @@ namespace Game.Core.Tests.Editor
         [SetUp]
         public void SetUp()
         {
-            asset = ScriptableObject.CreateInstance<MockAddressableAsset>();
+            asset = ScriptableObject.CreateInstance<FakeAddressableAsset>();
             handle = Addressables.ResourceManager.CreateCompletedOperation(asset, string.Empty);
             loadedAddressable = new LoadedAddressable<ScriptableObject>(handle);
         }

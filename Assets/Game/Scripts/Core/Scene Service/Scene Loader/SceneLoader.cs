@@ -5,24 +5,18 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Core
 {
-    public abstract class SceneLoader
+    public interface ISceneLoader
     {
-        public abstract UniTask LoadSceneAsync(
-            SceneMetaAsset scene,
-            IProgress<float> progress,
-            CancellationToken ct);
+        public UniTask LoadSceneAsync(SceneMetaAsset scene, IProgress<float> progress, CancellationToken ct);
 
-        public abstract UniTask UnloadSceneAsync(
-            SceneMetaAsset scene,
-            IProgress<float> progress,
-            CancellationToken ct);
+        public UniTask UnloadSceneAsync(SceneMetaAsset scene, IProgress<float> progress, CancellationToken ct);
 
-        public abstract List<UniTask> LoadManyScenesAsync(
+        public List<UniTask> LoadManyScenesAsync(
             List<SceneMetaAsset> sceneAssets,
             IProgress<float> progress,
             CancellationToken ct);
 
-        public abstract List<UniTask> UnloadManyScenesAsync(
+        public List<UniTask> UnloadManyScenesAsync(
             List<SceneMetaAsset> sceneAssets,
             IProgress<float> progress,
             CancellationToken ct);
