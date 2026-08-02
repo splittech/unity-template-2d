@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Core.Tests.Mocks
+namespace Game.Core.Tests.Doubles
 {
     public class FakeAddressableAsset : ScriptableObject { }
 }

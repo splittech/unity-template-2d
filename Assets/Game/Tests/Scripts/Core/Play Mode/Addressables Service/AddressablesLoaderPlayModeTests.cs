@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Core.Tests.Mocks;
+using Game.Core.Tests.Doubles;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;

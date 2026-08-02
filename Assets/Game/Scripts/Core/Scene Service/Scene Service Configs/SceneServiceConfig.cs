@@ -14,28 +14,24 @@ using UnityEditor.SceneManagement;
 
 namespace Game.Core
 {
-    [CreateAssetMenu(fileName = "Scene Service Config", menuName = "Game/Configs/Scene Service/Scene Service Config", order = 0)]
-    public class SceneServiceConfig : ScriptableObject
+    public abstract class SceneServiceConfig : ScriptableObject
     {
+        [Title("Core Scene")]
         [SerializeField] private SceneMetaAsset _coreScene;
-        [SerializeField] private SceneMetaAsset _mainMenuScene;
-        [SerializeField] private SceneMetaAsset _gameplayScene;
+
+        [Title("Other Scenes")]
+        // Other scenes in subclasses
 
         private readonly List<SceneMetaAsset> _allScenes = new();
 
         public SceneMetaAsset CoreScene => _coreScene;
-        public SceneMetaAsset MainMenuScene => _mainMenuScene;
-        public SceneMetaAsset GameplayScene => _gameplayScene;
         public List<SceneMetaAsset> AllScenes => _allScenes.ToList();
 
         public void RecreateAllScenesList()
         {
             _allScenes.Clear();
-
             _allScenes.Add(_coreScene);
-            _allScenes.Add(_mainMenuScene);
-            _allScenes.Add(_gameplayScene);
-
+            FillAllSceneList(_allScenes);
             ValidateAllScenesList();
         }
 
@@ -58,6 +54,8 @@ namespace Game.Core
         {
             return _allScenes.Where(scene => scene != _coreScene).ToList();
         }
+
+        protected abstract void FillAllSceneList(List<SceneMetaAsset> allScenes);
 
         private void ValidateAllScenesList()
         {

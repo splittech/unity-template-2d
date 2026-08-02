@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Tests.Common;
@@ -16,7 +17,7 @@ namespace Game.Core.Tests.PlayMode
         [SetUp]
         public void SetUp()
         {
-            testScene = TestConfig.Get().SceneServiceConfig.CoreScene;
+            testScene = TestConfig.Get().SceneLoaderTestScene;
 
             Assert.That(testScene, Is.Not.Null);
 
@@ -38,6 +39,70 @@ namespace Game.Core.Tests.PlayMode
 
                 Assert.That(loadedScene.IsValid(), Is.True);
                 Assert.That(loadedScene.isLoaded, Is.True);
+
+                Assert.That(progressValue, Is.EqualTo(1f).Within(0.001f));
+            });
+        }
+
+        [UnityTest]
+        public IEnumerator LoadSceneAsync_ProgressIsBoundedAndEndsAtOne()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                List<float> progressValues = new();
+
+                await loader.LoadSceneAsync(
+                    testScene,
+                    new ImmediateProgress<float>(progressValues.Add),
+                    CancellationToken.None);
+
+                Assert.That(progressValues, Is.Not.Empty);
+                Assert.That(progressValues, Has.All.InRange(0f, 1f));
+                Assert.That(progressValues[^1], Is.EqualTo(1f).Within(0.001f));
+
+                for (int i = 1; i < progressValues.Count; i++)
+                {
+                    Assert.That(
+                        progressValues[i],
+                        Is.GreaterThanOrEqualTo(progressValues[i - 1]));
+                }
+            });
+        }
+
+        [UnityTest]
+        public IEnumerator UnloadSceneAsync_LoadedScene_UnloadsScene()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                await loader.LoadSceneAsync(
+                    testScene,
+                    new ImmediateProgress<float>(_ => { }),
+                    CancellationToken.None);
+
+                await loader.UnloadSceneAsync(
+                    testScene,
+                    new ImmediateProgress<float>(_ => { }),
+                    CancellationToken.None);
+
+                Scene scene = SceneManager.GetSceneByName(testScene.SceneReference.Name);
+                Assert.That(!scene.IsValid() || !scene.isLoaded, Is.True);
+            });
+        }
+
+        [UnityTest]
+        public IEnumerator UnloadSceneAsync_NotLoadedScene_CompletesAndReportsOne()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                Scene scene = SceneManager.GetSceneByName(testScene.SceneReference.Name);
+                Assert.That(!scene.IsValid() || !scene.isLoaded, Is.True);
+
+                float progressValue = -1f;
+
+                await loader.UnloadSceneAsync(
+                    testScene,
+                    new ImmediateProgress<float>(value => progressValue = value),
+                    CancellationToken.None);
 
                 Assert.That(progressValue, Is.EqualTo(1f).Within(0.001f));
             });

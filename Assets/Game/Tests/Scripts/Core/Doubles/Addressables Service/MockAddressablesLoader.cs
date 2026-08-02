@@ -3,7 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 
-namespace Game.Core.Tests.Mocks
+namespace Game.Core.Tests.Doubles
 {
     public class MockAddressablesLoader : IAddressablesLoader
     {

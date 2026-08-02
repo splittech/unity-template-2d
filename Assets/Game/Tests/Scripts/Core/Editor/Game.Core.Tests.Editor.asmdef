@@ -9,7 +9,7 @@
         "UniTask",
         "Game.Tests.Common",
         "Game.Core",
-        "Game.Core.Tests.Mocks"
+        "Game.Core.Tests.Doubles"
     ],
     "includePlatforms": [
         "Editor"

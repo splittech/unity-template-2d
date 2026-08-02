@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Game.Core.Tests.Mocks;
+using Game.Core.Tests.Doubles;
 using NUnit.Framework;
 using UnityEngine.AddressableAssets;
 

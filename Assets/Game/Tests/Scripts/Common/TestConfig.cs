@@ -9,9 +9,9 @@ namespace Game.Tests.Common
     {
         private const string TestsConfigAssetPath = "Assets/Game/Tests/Configs/Tests Config.asset";
 
-        [SerializeField] private SceneServiceConfig sceneServiceConfig;
+        [SerializeField] private SceneMetaAsset _sceneLoaderTestScene;
 
-        public SceneServiceConfig SceneServiceConfig => sceneServiceConfig;
+        public SceneMetaAsset SceneLoaderTestScene => _sceneLoaderTestScene;
 
         public static TestConfig Get()
         {

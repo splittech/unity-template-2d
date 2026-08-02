@@ -1,5 +1,5 @@
 using System;
-using Game.Core.Tests.Mocks;
+using Game.Core.Tests.Doubles;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;

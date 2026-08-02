@@ -10,7 +10,8 @@
         "VContainer",
         "Alchemy",
         "DOTween.Modules",
-        "Eflatun.SceneReference"
+        "Eflatun.SceneReference",
+        "ZLinq.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

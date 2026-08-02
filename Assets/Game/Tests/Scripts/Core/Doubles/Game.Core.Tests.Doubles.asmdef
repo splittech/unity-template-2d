@@ -1,6 +1,6 @@
 {
-    "name": "Game.Core.Tests.Mocks",
-    "rootNamespace": "Game.Core.Tests.Mocks",
+    "name": "Game.Core.Tests.Doubles",
+    "rootNamespace": "Game.Core.Tests.Doubles",
     "references": [
         "UniTask",
         "Unity.Addressables",
