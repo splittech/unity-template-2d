@@ -11,7 +11,7 @@ using UnityEngine.TestTools;
 
 namespace Game.Core.Tests.PlayMode
 {
-    public class UnitySceneLoaderTests
+    public class SceneLoaderTests
     {
         private const string TestSceneGuid = "c69c75e945759e246893415ee802a415";
 
