@@ -8,11 +8,11 @@ namespace Game.Core
     public class SceneService
     {
         private readonly SceneServiceConfig _config;
-        private readonly SceneLoader _sceneLoader;
+        private readonly ISceneLoader _sceneLoader;
 
         public SceneServiceConfig Config => _config;
 
-        public SceneService(SceneServiceConfig config, SceneLoader sceneLoader)
+        public SceneService(SceneServiceConfig config, ISceneLoader sceneLoader)
         {
             _config = config;
             _sceneLoader = sceneLoader;

@@ -16,7 +16,7 @@ namespace Game.Core.Tests.Editor
         [SetUp]
         public void SetUp()
         {
-            asset = ScriptableObject.CreateInstance<MockAddressableAsset>();
+            asset = ScriptableObject.CreateInstance<FakeAddressableAsset>();
             handle = Addressables.ResourceManager.CreateCompletedOperation(asset, string.Empty);
             loadedAddressable = new LoadedAddressable<ScriptableObject>(handle);
         }

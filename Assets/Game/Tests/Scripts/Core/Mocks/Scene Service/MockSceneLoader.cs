@@ -6,17 +6,14 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Core.Tests.Mocks
 {
-    public class MockSceneLoader : SceneLoader
+    public class MockSceneLoader : ISceneLoader
     {
         public readonly List<SceneMetaAsset> LoadCalls = new();
         public readonly List<SceneMetaAsset> UnloadCalls = new();
 
         public readonly HashSet<SceneMetaAsset> LoadedScenes = new();
 
-        public override UniTask LoadSceneAsync(
-            SceneMetaAsset scene,
-            IProgress<float> progress,
-            CancellationToken ct)
+        public UniTask LoadSceneAsync(SceneMetaAsset scene, IProgress<float> progress, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
 
@@ -28,10 +25,7 @@ namespace Game.Core.Tests.Mocks
             return UniTask.CompletedTask;
         }
 
-        public override UniTask UnloadSceneAsync(
-            SceneMetaAsset scene,
-            IProgress<float> progress,
-            CancellationToken ct)
+        public UniTask UnloadSceneAsync(SceneMetaAsset scene, IProgress<float> progress, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
 
@@ -45,7 +39,7 @@ namespace Game.Core.Tests.Mocks
             return UniTask.CompletedTask;
         }
 
-        public override List<UniTask> LoadManyScenesAsync(
+        public List<UniTask> LoadManyScenesAsync(
             List<SceneMetaAsset> scenes,
             IProgress<float> progress,
             CancellationToken ct)
@@ -58,7 +52,7 @@ namespace Game.Core.Tests.Mocks
                 .ToList();
         }
 
-        public override List<UniTask> UnloadManyScenesAsync(
+        public List<UniTask> UnloadManyScenesAsync(
             List<SceneMetaAsset> scenes,
             IProgress<float> progress,
             CancellationToken ct)

@@ -11,7 +11,7 @@ namespace Game.Core.Tests.PlayMode
     public class UnitySceneLoaderTests
     {
         private SceneMetaAsset testScene;
-        private UnitySceneLoader loader;
+        private SceneLoader loader;
 
         [SetUp]
         public void SetUp()
@@ -20,7 +20,7 @@ namespace Game.Core.Tests.PlayMode
 
             Assert.That(testScene, Is.Not.Null);
 
-            loader = new UnitySceneLoader();
+            loader = new SceneLoader();
         }
 
         [UnityTest]
