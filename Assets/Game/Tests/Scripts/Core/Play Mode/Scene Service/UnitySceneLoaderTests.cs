@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Tests.Common;
+using Eflatun.SceneReference;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
@@ -11,15 +13,22 @@ namespace Game.Core.Tests.PlayMode
 {
     public class UnitySceneLoaderTests
     {
+        private const string TestSceneGuid = "c69c75e945759e246893415ee802a415";
+
         private SceneMetaAsset testScene;
         private SceneLoader loader;
 
         [SetUp]
         public void SetUp()
         {
-            testScene = TestConfig.Get().SceneLoaderTestScene;
+            testScene = ScriptableObject.CreateInstance<SceneMetaAsset>();
 
-            Assert.That(testScene, Is.Not.Null);
+            FieldInfo sceneReferenceField = typeof(SceneMetaAsset).GetField(
+                "_sceneReference",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            Assert.That(sceneReferenceField, Is.Not.Null);
+            sceneReferenceField.SetValue(testScene, new SceneReference(TestSceneGuid));
 
             loader = new SceneLoader();
         }
@@ -119,12 +128,15 @@ namespace Game.Core.Tests.PlayMode
                 Scene scene = SceneManager.GetSceneByName(
                     testScene.SceneReference.Name);
 
-                if (!scene.IsValid() || !scene.isLoaded)
-                    return;
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    await SceneManager
+                        .UnloadSceneAsync(scene)
+                        .ToUniTask();
+                }
 
-                await SceneManager
-                    .UnloadSceneAsync(scene)
-                    .ToUniTask();
+                Object.Destroy(testScene);
+                testScene = null;
             });
         }
     }

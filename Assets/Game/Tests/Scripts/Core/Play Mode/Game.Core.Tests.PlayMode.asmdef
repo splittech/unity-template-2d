@@ -8,7 +8,6 @@
         "Unity.Addressables",
         "UniTask",
         "Eflatun.SceneReference",
-        "Game.Tests.Common",
         "Game.Core",
         "Game.Core.Tests.Doubles"
     ],

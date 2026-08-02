@@ -7,7 +7,6 @@
         "Unity.ResourceManager",
         "Unity.Addressables",
         "UniTask",
-        "Game.Tests.Common",
         "Game.Core",
         "Game.Core.Tests.Doubles"
     ],
