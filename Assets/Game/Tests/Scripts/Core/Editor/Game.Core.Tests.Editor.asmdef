@@ -1,0 +1,29 @@
+{
+    "name": "Game.Core.Tests.Editor",
+    "rootNamespace": "Game.Core.Tests.Editor",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.ResourceManager",
+        "Unity.Addressables",
+        "UniTask",
+        "Game.Tests.Common",
+        "Game.Core",
+        "Game.Core.Tests.Mocks"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

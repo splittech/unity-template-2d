@@ -1,0 +1,28 @@
+{
+    "name": "Game.Core.Tests.PlayMode",
+    "rootNamespace": "Game.Core.Tests.PlayMode",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.ResourceManager",
+        "Unity.Addressables",
+        "UniTask",
+        "Eflatun.SceneReference",
+        "Game.Tests.Common",
+        "Game.Core",
+        "Game.Core.Tests.Mocks"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
