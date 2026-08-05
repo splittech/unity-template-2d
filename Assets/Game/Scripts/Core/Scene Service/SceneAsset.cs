@@ -10,7 +10,7 @@ using UnityEditor;
 
 namespace Game.Core
 {
-    [CreateAssetMenu(fileName = "Scene Meta Asset", menuName = "Game/Configs/Scene Service/Scene Meta Asset", order = 0)]
+    [CreateAssetMenu(fileName = "Scene Meta Asset", menuName = "Game/Meta Assets/Scene Service/Scene Meta Asset", order = 0)]
     public class SceneMetaAsset : ScriptableObject
     {
         [SerializeField] private SceneReference _sceneReference;

@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace Game.Core
 {
-    [CreateAssetMenu(fileName = "Scene Service Config", menuName = "Game/Configs/Scene Service/Scene Service Config", order = 0)]
+    [CreateAssetMenu(fileName = "Basic Scene Service Config", menuName = "Game/Configs/Scene Service/Basic Scene Service Config", order = 0)]
     public class BasicSceneServiceConfig : SceneServiceConfig
     {
+        [Header("Other Scenes")]
         [SerializeField] private SceneMetaAsset _mainMenuScene;
         [SerializeField] private SceneMetaAsset _gameplayScene;
 

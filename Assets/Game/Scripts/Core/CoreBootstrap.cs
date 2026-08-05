@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace Game.Core
 {
-    public class CoreBootstrap : IInitializable
+    public class CoreBootstrap : IAsyncStartable
     {
         private readonly LoadingScreen _loadingScreen;
         private readonly SceneService _sceneService;
@@ -15,17 +15,12 @@ namespace Game.Core
             _loadingScreen = loadingScreen;
         }
 
-        public void Initialize()
-        {
-            InitializeAsync().Forget();
-        }
-
-        public async UniTask InitializeAsync(CancellationToken ct = default)
+        public async UniTask StartAsync(CancellationToken cancellation = default)
         {
             _loadingScreen.SetProgressDescription("Startup game");
             _loadingScreen.ShowImmediate();
 
-            await _sceneService.LoadInitialScenes(_loadingScreen.Progress, ct);
+            await _sceneService.LoadInitialScenes(_loadingScreen.Progress, cancellation);
             await _loadingScreen.Hide();
         }
     }

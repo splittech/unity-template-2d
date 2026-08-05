@@ -7,10 +7,15 @@ namespace Game.Core
     public class CoreScope : LifetimeScope
     {
         [Header("Loading Screen")]
-        [SerializeField] private LoadingScreen loadingScreen;
+        [SerializeField] private LoadingScreen _loadingScreen;
 
         [Header("Scene Service")]
-        [SerializeField] private SceneServiceConfig sceneServiceConfig;
+        [SerializeField] private SceneServiceConfig _sceneServiceConfig;
+
+        [Header("Sound Service")]
+        [SerializeField] private AudioServiceConfig _audioServiceConfig;
+        [SerializeField] private MusicPlayer _musicPlayer;
+        [SerializeField] private SoundPlayer _soundPlayer;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -18,16 +23,22 @@ namespace Game.Core
             builder.RegisterEntryPoint<CoreBootstrap>();
 
             // Loading Screen
-            builder.RegisterComponent(loadingScreen);
+            builder.RegisterComponent(_loadingScreen);
 
             // Scene Service
-            builder.RegisterInstance(sceneServiceConfig);
-            builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
             builder.Register<SceneService>(Lifetime.Singleton);
+            builder.RegisterInstance(_sceneServiceConfig);
+            builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
+
+            // Audio Service
+            builder.Register<AudioService>(Lifetime.Singleton);
+            builder.RegisterInstance(_audioServiceConfig);
+            builder.RegisterInstance(_musicPlayer);
+            builder.RegisterInstance(_soundPlayer);
 
             // Addressables Service
-            builder.Register<IAddressablesLoader, AddressablesLoader>(Lifetime.Singleton);
             builder.Register<AddressablesService>(Lifetime.Singleton);
+            builder.Register<IAddressablesLoader, AddressablesLoader>(Lifetime.Singleton);
         }
 
     }

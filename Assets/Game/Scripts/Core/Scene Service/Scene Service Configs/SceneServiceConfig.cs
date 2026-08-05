@@ -16,11 +16,8 @@ namespace Game.Core
 {
     public abstract class SceneServiceConfig : ScriptableObject
     {
-        [Title("Core Scene")]
+        [Header("Core Scene")]
         [SerializeField] private SceneMetaAsset _coreScene;
-
-        [Title("Other Scenes")]
-        // Other scenes in subclasses
 
         private readonly List<SceneMetaAsset> _allScenes = new();
 
@@ -82,6 +79,7 @@ namespace Game.Core
         }
 
 #if UNITY_EDITOR
+        [BoxGroup("Open Only Core Scene")]
         [Button]
         private void OpenOnlyCoreScene()
         {
