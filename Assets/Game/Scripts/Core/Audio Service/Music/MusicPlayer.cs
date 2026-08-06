@@ -1,11 +1,17 @@
+using Alchemy.Inspector;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Audio;
 using VContainer;
 
 namespace Game.Core
 {
     public class MusicPlayer : MonoBehaviour
     {
+        [Header("Mixer Group")]
+        [SerializeField] private AudioMixerGroup _audioMixerGroup;
+
+        [Header("Audio Sources")]
         [SerializeField] private AudioSource _firstAudioSource;
         [SerializeField] private AudioSource _secondAudioSource;
 
@@ -15,6 +21,7 @@ namespace Game.Core
         private AudioSource _previousAudioSource;
         private Tween _fadeInTween;
         private Tween _fadeOutTween;
+
 
         [Inject]
         public void Construct(AudioServiceConfig config)
@@ -33,8 +40,8 @@ namespace Game.Core
                 SwitchCurrentAudioSource(_secondAudioSource);
             }
 
-            EnableAudioSource(_currentAudioSource, musicMetaAsset);
             FadeAudioSources(musicMetaAsset);
+            EnableAudioSource(_currentAudioSource, musicMetaAsset);
         }
 
         public void StopMusic()
@@ -55,7 +62,10 @@ namespace Game.Core
             _fadeOutTween?.Kill();
 
             if (_currentAudioSource != null)
-                _fadeInTween = _currentAudioSource.DOFade(musicMetaAsset.Volume, _config.MusicFadeTime);
+            {
+                _fadeInTween = _currentAudioSource
+                    .DOFade(musicMetaAsset.Volume, _config.MusicFadeTime);
+            }
 
             if (_previousAudioSource != null)
             {
@@ -73,6 +83,7 @@ namespace Game.Core
             audioSource.clip = musicMetaAsset.AudioClip;
             audioSource.volume = 0;
             audioSource.gameObject.SetActive(true);
+            audioSource.Play();
         }
 
         private void DisableAudioSource(AudioSource audioSource)
@@ -80,7 +91,36 @@ namespace Game.Core
             if (audioSource == null)
                 return;
 
+            audioSource.Stop();
             audioSource.gameObject.SetActive(false);
+        }
+
+        [BoxGroup("Recreate Audio Sources")]
+        [Button]
+        private void RecreateAudioSources()
+        {
+            if (_firstAudioSource != null)
+                DestroyImmediate(_firstAudioSource.gameObject);
+
+            if (_secondAudioSource != null)
+                DestroyImmediate(_secondAudioSource.gameObject);
+
+            _firstAudioSource = CreateAudioSource(1);
+            _secondAudioSource = CreateAudioSource(2);
+        }
+
+        private AudioSource CreateAudioSource(int number)
+        {
+            GameObject audioSourceObject = new($"{name}'s Audio Source ({number})");
+            audioSourceObject.transform.SetParent(transform);
+            audioSourceObject.SetActive(false);
+
+            AudioSource audioSource = audioSourceObject.AddComponent<AudioSource>();
+            audioSource.outputAudioMixerGroup = _audioMixerGroup;
+            audioSource.playOnAwake = false;
+            audioSource.loop = true;
+
+            return audioSource;
         }
     }
 }

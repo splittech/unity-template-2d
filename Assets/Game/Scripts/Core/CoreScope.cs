@@ -33,8 +33,8 @@ namespace Game.Core
             // Audio Service
             builder.Register<AudioService>(Lifetime.Singleton);
             builder.RegisterInstance(_audioServiceConfig);
-            builder.RegisterInstance(_musicPlayer);
-            builder.RegisterInstance(_soundPlayer);
+            builder.RegisterComponent(_musicPlayer);
+            builder.RegisterComponent(_soundPlayer);
 
             // Addressables Service
             builder.Register<AddressablesService>(Lifetime.Singleton);

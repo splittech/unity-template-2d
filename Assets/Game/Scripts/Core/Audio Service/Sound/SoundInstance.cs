@@ -20,6 +20,8 @@ namespace Game.Core
         {
             _audioSource = audioSource;
             _pool = pool;
+
+            _isValid = true;
         }
 
         public void Play()
@@ -91,7 +93,7 @@ namespace Game.Core
 
         private void CheckIsValid()
         {
-            if (_isValid)
+            if (!_isValid)
                 throw new InvalidOperationException($"SoundInstance was not valid. Check IsValid before calling a method.");
         }
     }

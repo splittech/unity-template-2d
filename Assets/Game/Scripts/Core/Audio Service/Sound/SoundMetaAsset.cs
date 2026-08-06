@@ -9,7 +9,7 @@ namespace Game.Core
     {
         [SerializeField] private AudioClip _audioClip;
         [Range(0f, 1f)]
-        [SerializeField] private float _volume;
+        [SerializeField] private float _volume = 1f;
         [SerializeField] private bool _isLooping;
         [SerializeField] private bool _isSpatial;
         [ShowIf("_isSpatial")]

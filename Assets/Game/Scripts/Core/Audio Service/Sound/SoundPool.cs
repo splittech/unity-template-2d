@@ -8,14 +8,20 @@ namespace Game.Core
 {
     public class SoundPool : MonoBehaviour
     {
+        [Header("Mixer Group")]
         [SerializeField] private AudioMixerGroup _audioMixerGroup;
+
+        [Header("Audio Sources")]
         [SerializeField] private List<AudioSource> _audioSources;
 
-        private Dictionary<AudioSource, SoundInstance> _sounds = new();
-        private LinkedList<SoundInstance> _soundQueue = new();
+        private Dictionary<AudioSource, SoundInstance> _sounds;
+        private LinkedList<SoundInstance> _soundQueue;
 
         private void Awake()
         {
+            _sounds = new Dictionary<AudioSource, SoundInstance>();
+            _soundQueue = new LinkedList<SoundInstance>();
+
             foreach (var source in _audioSources)
                 _sounds[source] = null;
         }
@@ -43,9 +49,8 @@ namespace Game.Core
             if (freeAudioSource == null)
             {
                 SoundInstance oldestSound = _soundQueue.First.Value;
-                oldestSound.Release();
-
                 freeAudioSource = oldestSound.GetAudioSource();
+                oldestSound.Release();
             }
 
             return CreateSound(freeAudioSource);
@@ -53,8 +58,12 @@ namespace Game.Core
 
         public void Release(SoundInstance sound)
         {
+            AudioSource source = sound.GetAudioSource();
+
             _soundQueue.Remove(sound);
-            _sounds[sound.GetAudioSource()] = null;
+            _sounds[source] = null;
+
+            source.gameObject.SetActive(false);
         }
 
         private SoundInstance CreateSound(AudioSource source)
@@ -64,12 +73,14 @@ namespace Game.Core
             _soundQueue.AddLast(sound);
             _sounds[source] = sound;
 
+            source.gameObject.SetActive(true);
+
             return sound;
         }
 
-        [BoxGroup("Create Audio Sources")]
+        [BoxGroup("Recreate Audio Sources")]
         [Button]
-        private void CreateAudioSources(int number)
+        private void RecreateAudioSources(int number)
         {
             _audioSources.ForEach(source =>
             {
@@ -83,9 +94,11 @@ namespace Game.Core
             {
                 GameObject audioSourceObject = new($"{name}'s Audio Source ({i + 1})");
                 audioSourceObject.transform.SetParent(transform);
+                audioSourceObject.SetActive(false);
 
                 AudioSource audioSource = audioSourceObject.AddComponent<AudioSource>();
                 audioSource.outputAudioMixerGroup = _audioMixerGroup;
+                audioSource.playOnAwake = false;
 
                 _audioSources.Add(audioSource);
             }
