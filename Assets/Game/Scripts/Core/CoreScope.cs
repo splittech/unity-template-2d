@@ -27,11 +27,12 @@ namespace Game.Core
 
             // Scene Service
             builder.Register<SceneService>(Lifetime.Singleton);
-            builder.RegisterInstance(_sceneServiceConfig);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
+            builder.RegisterInstance(_sceneServiceConfig);
 
             // Audio Service
             builder.Register<AudioService>(Lifetime.Singleton);
+            builder.Register<AudioSettings>(Lifetime.Singleton);
             builder.RegisterInstance(_audioServiceConfig);
             builder.RegisterComponent(_musicPlayer);
             builder.RegisterComponent(_soundPlayer);

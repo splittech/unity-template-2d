@@ -24,6 +24,20 @@ namespace Game.Core
             _isValid = true;
         }
 
+        public void Release()
+        {
+            if (!_isValid)
+                return;
+
+            _audioSource.Stop();
+            _audioSource.gameObject.SetActive(false);
+            _audioSource.transform.position = Vector3.zero;
+
+            _pool.Release(this);
+
+            _isValid = false;
+        }
+
         public void Play()
         {
             CheckIsValid();
@@ -52,21 +66,9 @@ namespace Game.Core
             _isPaused = false;
         }
 
-        public void Release()
-        {
-            if (!_isValid)
-                return;
-
-            _audioSource.Stop();
-            _audioSource.gameObject.SetActive(false);
-
-            _pool.Release(this);
-
-            _isValid = false;
-        }
-
         public void ApplySettings(SoundMetaAsset soundMetaAsset)
         {
+            CheckIsValid();
             _audioSource.clip = soundMetaAsset.AudioClip;
             _audioSource.volume = soundMetaAsset.Volume;
             _audioSource.loop = soundMetaAsset.IsLooping;
@@ -77,11 +79,13 @@ namespace Game.Core
 
         public void SetPosition(Vector3 position)
         {
+            CheckIsValid();
             _audioSource.transform.position = position;
         }
 
         public void SetSpatial(bool spatial)
         {
+            CheckIsValid();
             _audioSource.spatialBlend = spatial ? 1f : 0f;
         }
 

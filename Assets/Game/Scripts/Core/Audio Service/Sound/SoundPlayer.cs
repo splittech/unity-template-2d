@@ -14,7 +14,14 @@ namespace Game.Core
             sound.SetSpatial(false);
 
             if (autoStart)
+            {
                 sound.Play();
+            }
+            else
+            {
+                sound.Stop();
+            }
+
 
             return sound;
         }
@@ -26,6 +33,7 @@ namespace Game.Core
 
             SoundInstance sound = _soundPool.Get();
             sound.ApplySettings(soundAsset);
+            sound.SetPosition(position);
 
             if (autoStart)
                 sound.Play();
