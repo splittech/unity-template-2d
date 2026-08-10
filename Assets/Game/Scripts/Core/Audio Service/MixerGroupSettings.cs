@@ -42,7 +42,7 @@ namespace Game.Core
             if (string.IsNullOrEmpty(mixerGroupSettings._volumeExposedName))
             {
                 throw new ArgumentException(
-                    "AudioServiceConfig '{config.name}': MixerGroup volume exposed name was null or empty.");
+                    $"AudioServiceConfig '{config.name}': MixerGroup volume exposed name was null or empty.");
             }
         }
 
@@ -53,6 +53,8 @@ namespace Game.Core
 
             if (!config.MixerGroupsSettings.TryGetValue(mixerGroup, out var mixerGroupSettings))
                 throw new ArgumentException($"AudioServiceConfig '{config.name}': MixerGroup is not registered.");
+
+            Validate(mixerGroupSettings, config);
 
             return mixerGroupSettings;
         }

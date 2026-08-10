@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Inspector;
@@ -19,6 +20,8 @@ namespace Game.Core
 
         private void Awake()
         {
+            ValidatePoolSize();
+
             _sounds = new Dictionary<AudioSource, SoundInstance>();
             _soundQueue = new LinkedList<SoundInstance>();
 
@@ -36,7 +39,7 @@ namespace Game.Core
                     continue;
 
                 // Sound finished playing.
-                if (!sound.IsPaused && !source.isPlaying)
+                if (sound.State == SoundState.Playing && !source.isPlaying)
                     sound.Release();
             }
         }
@@ -62,8 +65,6 @@ namespace Game.Core
 
             _soundQueue.Remove(sound);
             _sounds[source] = null;
-
-            source.gameObject.SetActive(false);
         }
 
         private SoundInstance CreateSound(AudioSource source)
@@ -73,9 +74,25 @@ namespace Game.Core
             _soundQueue.AddLast(sound);
             _sounds[source] = sound;
 
-            source.gameObject.SetActive(true);
-
             return sound;
+        }
+
+        public void ValidatePoolSize()
+        {
+            if (_audioSources == null)
+                throw new InvalidOperationException($"SoundPool '{name}': Audio Sources list is null.");
+
+            if (_audioSources.Count == 0)
+                throw new InvalidOperationException($"SoundPool '{name}': Audio Sources list is empty.");
+
+            foreach (var audioSource in _audioSources)
+            {
+                if (audioSource == null)
+                    throw new InvalidOperationException($"SoundPool '{name}': Audio Sources list contains null reference.");
+            }
+
+            if (_audioSources.Distinct().Count() != _audioSources.Count)
+                throw new InvalidOperationException($"SoundPool '{name}': Audio Sources list contains duplicates.");
         }
 
         [BoxGroup("Recreate Audio Sources")]
@@ -102,6 +119,8 @@ namespace Game.Core
 
                 _audioSources.Add(audioSource);
             }
+
+            ValidatePoolSize();
         }
     }
 }

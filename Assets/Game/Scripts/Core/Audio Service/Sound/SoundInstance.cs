@@ -3,102 +3,130 @@ using UnityEngine;
 
 namespace Game.Core
 {
+    public enum SoundState
+    {
+        Pending,
+        Playing,
+        Paused,
+        Stopped,
+        Released
+    }
+
     public class SoundInstance
     {
         private readonly AudioSource _audioSource;
         private readonly SoundPool _pool;
 
-        private bool _isValid;
-        private bool _isPaused;
+        private SoundState _state;
 
-        public bool IsValid => _isValid;
-        public bool IsPaused => _isPaused;
-
-        public event Action OnFinishedPlaying;
+        public SoundState State => _state;
 
         public SoundInstance(AudioSource audioSource, SoundPool pool)
         {
             _audioSource = audioSource;
             _pool = pool;
 
-            _isValid = true;
+            _state = SoundState.Pending;
+
+            _audioSource.gameObject.SetActive(true);
+            SetSpatial(false);
         }
 
         public void Release()
         {
-            if (!_isValid)
+            if (_state == SoundState.Released)
                 return;
+
+            _pool.Release(this);
+            _state = SoundState.Released;
 
             _audioSource.Stop();
             _audioSource.gameObject.SetActive(false);
             _audioSource.transform.position = Vector3.zero;
-
-            _pool.Release(this);
-
-            _isValid = false;
         }
 
         public void Play()
         {
-            CheckIsValid();
+            CheckIsNotReleased();
+
+            if (_state == SoundState.Playing)
+                return;
+
+            _state = SoundState.Playing;
+
             _audioSource.Play();
-            _isPaused = false;
         }
 
         public void Stop()
         {
-            CheckIsValid();
+            CheckIsNotReleased();
+
+            if (_state is not (SoundState.Playing or SoundState.Paused))
+                return;
+
+            _state = SoundState.Stopped;
+
             _audioSource.Stop();
-            _isPaused = true;
         }
 
         public void Pause()
         {
-            CheckIsValid();
+            CheckIsNotReleased();
+
+            if (_state != SoundState.Playing)
+                return;
+
+            _state = SoundState.Paused;
+
             _audioSource.Pause();
-            _isPaused = true;
         }
 
         public void Unpause()
         {
-            CheckIsValid();
+            CheckIsNotReleased();
+
+            if (_state != SoundState.Paused)
+                return;
+
+            _state = SoundState.Playing;
+
             _audioSource.UnPause();
-            _isPaused = false;
         }
 
-        public void ApplySettings(SoundMetaAsset soundMetaAsset)
+        public void ApplySettingsFromAsset(SoundMetaAsset soundMetaAsset)
         {
-            CheckIsValid();
+            CheckIsNotReleased();
             _audioSource.clip = soundMetaAsset.AudioClip;
             _audioSource.volume = soundMetaAsset.Volume;
             _audioSource.loop = soundMetaAsset.IsLooping;
             _audioSource.maxDistance = soundMetaAsset.MaxHearDistance;
-
-            SetSpatial(soundMetaAsset.IsSpatial);
         }
 
         public void SetPosition(Vector3 position)
         {
-            CheckIsValid();
+            CheckIsNotReleased();
             _audioSource.transform.position = position;
         }
 
         public void SetSpatial(bool spatial)
         {
-            CheckIsValid();
+            CheckIsNotReleased();
             _audioSource.spatialBlend = spatial ? 1f : 0f;
         }
 
         public AudioSource GetAudioSource()
         {
-            CheckIsValid();
+            CheckIsNotReleased();
             return _audioSource;
         }
 
-        private void CheckIsValid()
+        private void CheckIsNotReleased()
         {
-            if (!_isValid)
-                throw new InvalidOperationException($"SoundInstance was not valid. Check IsValid before calling a method.");
+            if (_state == SoundState.Released)
+            {
+                throw new InvalidOperationException(
+                    $"SoundInstance has already been released. Check state before calling a method.");
+            }
         }
     }
 }
