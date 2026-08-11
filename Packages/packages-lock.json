@@ -1,51 +1,51 @@
 {
   "dependencies": {
     "com.annulusgames.alchemy": {
-      "version": "2.1.0",
+      "version": "https://github.com/annulusgames/Alchemy.git?path=/Alchemy/Assets/Alchemy",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "0fd900299de83d09d795ca81e804fae328bd0229"
     },
     "com.cysharp.r3": {
-      "version": "1.3.1",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "url": "https://package.openupm.com"
+      "hash": "c6f8a932d9b8e771a9f405e6d72058a21ce0b457"
     },
     "com.cysharp.unitask": {
-      "version": "2.5.11",
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "ceac8d6946b1125fe782cd171fbcb245b567dbf9"
     },
     "com.cysharp.zlinq": {
-      "version": "1.5.6",
+      "version": "https://github.com/Cysharp/ZLinq.git?path=src/ZLinq.Unity/Assets/ZLinq.Unity",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "ce6fcff171ab2c5b1b41bf69239133be50c204d4"
     },
     "com.eflatun.scenereference": {
-      "version": "5.0.0",
+      "version": "https://github.com/starikcetin/Eflatun.SceneReference.git#5.0.0",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.settings-manager": "2.0.1"
+        "com.unity.settings-manager": "2.0.1",
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "url": "https://package.openupm.com"
+      "hash": "6821c571090fc0828accced5dbd7635152c23887"
     },
     "com.github-glitchenzo.nugetforunity": {
-      "version": "4.5.0",
+      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "acc1c7bc9ea34c33b830e40316fca52553878d29"
     },
     "com.unity.2d.animation": {
       "version": "13.0.4",
@@ -388,11 +388,11 @@
       "url": "https://packages.unity.com"
     },
     "jp.hadashikick.vcontainer": {
-      "version": "1.19.0",
+      "version": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "5401e5a7ebc4980a2b82141ffc26391a6547edd7"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
