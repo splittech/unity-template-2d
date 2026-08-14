@@ -7,20 +7,17 @@ using VContainer;
 
 namespace Game.MainMenu
 {
-    [RequireComponent(typeof(Slider))]
     public class MixerGroupVolumeSlider : MonoBehaviour
     {
+        [SerializeField] private Slider _slider;
         [SerializeField] private AudioMixerGroup _audioMixerGroup;
 
         private AudioService _audioService;
-        private Slider _slider;
 
         [Inject]
         public void Construct(AudioService audioService)
         {
             _audioService = audioService;
-
-            _slider = GetComponent<Slider>();
 
             _slider.value = _audioService.GetMixerGroupVolume(_audioMixerGroup);
 

@@ -5,7 +5,8 @@
         "R3.Unity",
         "Game.Core",
         "VContainer",
-        "UniTask"
+        "UniTask",
+        "Alchemy"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
