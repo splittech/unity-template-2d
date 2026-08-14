@@ -724,6 +724,7 @@ MonoBehaviour:
   _audioServiceConfig: {fileID: 11400000, guid: 698714f6e40d06344bff1469486d32e7, type: 2}
   _musicPlayer: {fileID: 924378565}
   _soundPlayer: {fileID: 557551468}
+  _addressablesServiceConfig: {fileID: 11400000, guid: 1dbcdebd6f9094944a6dbc050e3f8624, type: 2}
 --- !u!1 &435834133
 GameObject:
   m_ObjectHideFlags: 0

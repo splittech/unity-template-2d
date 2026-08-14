@@ -19,10 +19,7 @@ namespace Game.MainMenu
         public void Construct(AudioService audioService)
         {
             _audioService = audioService;
-        }
 
-        private void Start()
-        {
             _slider = GetComponent<Slider>();
 
             _slider.value = _audioService.GetMixerGroupVolume(_audioMixerGroup);

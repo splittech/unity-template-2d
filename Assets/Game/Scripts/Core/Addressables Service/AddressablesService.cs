@@ -6,10 +6,12 @@ namespace Game.Core
 {
     public class AddressablesService
     {
+        private readonly AddressablesServiceConfig _config;
         private readonly IAddressablesLoader _addressablesLoader;
 
-        public AddressablesService(IAddressablesLoader addressablesLoader)
+        public AddressablesService(AddressablesServiceConfig config, IAddressablesLoader addressablesLoader)
         {
+            _config = config;
             _addressablesLoader = addressablesLoader;
         }
 
@@ -18,6 +20,10 @@ namespace Game.Core
             CancellationToken ct = default)
         {
             ValidateDefinition(definition);
+
+            if (_config.EnableLogger)
+                GameLogger.Log($"Get download size of AddressablesPackDefenition with id '{definition.Id}'.");
+
             return _addressablesLoader.GetDownloadSizeAsync(definition.DownloadLabel, ct);
         }
 
@@ -27,6 +33,10 @@ namespace Game.Core
             CancellationToken ct = default)
         {
             ValidateDefinition(definition);
+
+            if (_config.EnableLogger)
+                GameLogger.Log($"Download pack of AddressablesPackDefenition with id '{definition.Id}'.");
+
             return _addressablesLoader.DownloadAsync(definition.DownloadLabel, progress, ct);
         }
 
@@ -36,6 +46,10 @@ namespace Game.Core
             CancellationToken ct = default)
         {
             ValidateDefinition(definition);
+
+            if (_config.EnableLogger)
+                GameLogger.Log($"Load pack of AddressablesPackDefenition with id '{definition.Id}'.");
+
             return _addressablesLoader.LoadAsync<AddressablesPack>(definition.Pack, progress, ct);
         }
 
