@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 
-using UnityEditor;
 using UnityEditor.SceneManagement;
 
 #endif
@@ -16,6 +15,9 @@ namespace Game.Core
 {
     public abstract class SceneServiceConfig : ScriptableObject
     {
+        [Header("Debug")]
+        [SerializeField] private bool _enableLogger;
+
         [Header("Core Scene")]
         [SerializeField] private SceneMetaAsset _coreScene;
 
@@ -23,6 +25,7 @@ namespace Game.Core
 
         public SceneMetaAsset CoreScene => _coreScene;
         public List<SceneMetaAsset> AllScenes => _allScenes.ToList();
+        public bool EnableLogger => _enableLogger;
 
         public void RecreateAllScenesList()
         {
@@ -37,6 +40,11 @@ namespace Game.Core
             return _allScenes.ToList();
         }
 
+        public List<SceneMetaAsset> GetAllScenesExceptCore()
+        {
+            return _allScenes.Where(scene => scene != _coreScene).ToList();
+        }
+
         public List<SceneMetaAsset> GetAllNonPersistentScenes()
         {
             return _allScenes.Where(scene => !scene.Persistent && scene != _coreScene).ToList();
@@ -47,35 +55,16 @@ namespace Game.Core
             return _allScenes.Where(scene => scene.Initial && scene != _coreScene).ToList();
         }
 
-        public List<SceneMetaAsset> GetAllScenesExceptCore()
-        {
-            return _allScenes.Where(scene => scene != _coreScene).ToList();
-        }
-
         protected abstract void FillAllSceneList(List<SceneMetaAsset> allScenes);
 
         private void ValidateAllScenesList()
         {
-            string editorMessage = "";
-#if UNITY_EDITOR
-            editorMessage = $" Config path: {AssetDatabase.GetAssetPath(this)}";
-#endif
-            try
-            {
-                _allScenes.ForEach(scene => SceneMetaAsset.Validate(scene));
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw new InvalidOperationException(ex.Message + editorMessage);
-            }
+            _allScenes.ForEach(scene => SceneMetaAsset.Validate(scene));
 
             if (_allScenes.Distinct().Count() != _allScenes.Count)
-            {
-                string message = "Scene list contains duplicates.";
-                throw new InvalidOperationException(message + editorMessage);
-            }
+                throw new InvalidOperationException("Scene list contains duplicates.");
 
-            Debug.Log("Scene list validation is successful.");
+            GameLogger.Log($"SceneServiceConfig '{name}': Scene list validation is successful.");
         }
 
 #if UNITY_EDITOR

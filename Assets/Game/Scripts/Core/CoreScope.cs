@@ -17,6 +17,9 @@ namespace Game.Core
         [SerializeField] private MusicPlayer _musicPlayer;
         [SerializeField] private SoundPlayer _soundPlayer;
 
+        [Header("Addressables Service")]
+        [SerializeField] private AddressablesServiceConfig _addressablesServiceConfig;
+
         protected override void Configure(IContainerBuilder builder)
         {
             // Bootstrap
@@ -40,6 +43,7 @@ namespace Game.Core
             // Addressables Service
             builder.Register<AddressablesService>(Lifetime.Singleton);
             builder.Register<IAddressablesLoader, AddressablesLoader>(Lifetime.Singleton);
+            builder.RegisterInstance(_addressablesServiceConfig);
         }
 
     }

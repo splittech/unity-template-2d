@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Game.Core.Tests.Doubles;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace Game.Core.Tests.Editor
@@ -14,6 +15,7 @@ namespace Game.Core.Tests.Editor
         private const string PackGuid = "0123456789abcdef0123456789abcdef";
 
         private MockAddressablesLoader loader;
+        private AddressablesServiceConfig config;
         private AddressablesService service;
         private AddressablesPackReference packReference;
         private AddressablesPackDefinition definition;
@@ -22,12 +24,20 @@ namespace Game.Core.Tests.Editor
         public void SetUp()
         {
             loader = new MockAddressablesLoader();
-            service = new AddressablesService(loader);
+            config = ScriptableObject.CreateInstance<AddressablesServiceConfig>();
+            service = new AddressablesService(config, loader);
             packReference = new AddressablesPackReference(PackGuid);
             definition = new AddressablesPackDefinition(
                 PackId,
                 new AssetLabelReference { labelString = DownloadLabel },
                 packReference);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (config != null)
+                UnityEngine.Object.DestroyImmediate(config);
         }
 
         [Test]

@@ -22,6 +22,9 @@ namespace Game.Core
 
         public async UniTask SwitchScene(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct = default)
         {
+            if (_config.EnableLogger)
+                GameLogger.Log($"Switch scene to SceneMetaAsset '{sceneAsset.name}'.");
+
             SceneMetaAsset.Validate(sceneAsset);
 
             CompositeProgress compositeProgress = new(value => progress.Report(value));
@@ -35,6 +38,9 @@ namespace Game.Core
 
         public async UniTask LoadInitialScenes(IProgress<float> progress, CancellationToken ct = default)
         {
+            if (_config.EnableLogger)
+                GameLogger.Log($"Load initial scenes.");
+
             List<SceneMetaAsset> scenesToLoad = _config.GetAllInitialScenes();
             List<UniTask> tasks = _sceneLoader.LoadManyScenesAsync(scenesToLoad, progress, ct);
 
