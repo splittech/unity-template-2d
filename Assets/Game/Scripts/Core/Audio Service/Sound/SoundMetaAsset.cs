@@ -14,7 +14,7 @@ namespace Game.Core
         [SerializeField] private bool _isLooping;
         [SerializeField] private bool _randomPitch;
         [ShowIf("_randomPitch")]
-        [Range(0f, 1f)]
+        [Range(0f, 0.5f)]
         [SerializeField] private float _randomPitchRange = 0.1f;
 
         [Header("Spatial")]

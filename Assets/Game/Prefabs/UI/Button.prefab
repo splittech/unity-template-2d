@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 5914983196009214851}
   - component: {fileID: 7744660038472733418}
   - component: {fileID: 5111946125524643913}
+  - component: {fileID: 193668489960585390}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -274,3 +275,22 @@ MonoBehaviour:
   _button: {fileID: 7744660038472733418}
   _hoverSound: {fileID: 11400000, guid: b1cb7bf7158a4264b803c2c921f51af1, type: 2}
   _clickSound: {fileID: 11400000, guid: d574312d681ec9e4caa08d867560208e, type: 2}
+--- !u!114 &193668489960585390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6839680499944101690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1156724cd9603584e93ba803ee6d4cb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.MainMenu::Game.MainMenu.ButtonAnimation
+  _button: {fileID: 7744660038472733418}
+  _hoverAnimationScale: 1.1
+  _hoverAnimationDuration: 0.3
+  _hoverAnimationEase: 27
+  _clickAnimationScale: 1.2
+  _clickAnimationDuration: 0.2
+  _clickAnimationEase: 27
