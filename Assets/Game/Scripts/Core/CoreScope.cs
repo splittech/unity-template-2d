@@ -28,6 +28,9 @@ namespace Game.Core
             // Loading Screen
             builder.RegisterComponent(_loadingScreen);
 
+            // Application Service
+            builder.Register<ApplicationService>(Lifetime.Singleton);
+
             // Scene Service
             builder.Register<SceneService>(Lifetime.Singleton);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);

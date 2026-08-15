@@ -43,6 +43,7 @@ namespace Game.Core
             _audioSource.Stop();
             _audioSource.gameObject.SetActive(false);
             _audioSource.transform.position = Vector3.zero;
+            _audioSource.pitch = 1f;
         }
 
         public void Play()
@@ -100,6 +101,12 @@ namespace Game.Core
             _audioSource.volume = soundMetaAsset.Volume;
             _audioSource.loop = soundMetaAsset.IsLooping;
             _audioSource.maxDistance = soundMetaAsset.MaxHearDistance;
+
+            if (soundMetaAsset.RandomPitch)
+            {
+                _audioSource.pitch = UnityEngine.Random
+                    .Range(1f - soundMetaAsset.RandomPitchRange, 1f + soundMetaAsset.RandomPitchRange);
+            }
         }
 
         public void SetPosition(Vector3 position)

@@ -1,4 +1,5 @@
 using System;
+using Alchemy.Inspector;
 using UnityEngine;
 
 namespace Game.Core
@@ -8,8 +9,13 @@ namespace Game.Core
     {
         [Header("General")]
         [SerializeField] private AudioClip _audioClip;
-        [Range(0f, 1f)][SerializeField] private float _volume = 1f;
+        [Range(0f, 1f)]
+        [SerializeField] private float _volume = 1f;
         [SerializeField] private bool _isLooping;
+        [SerializeField] private bool _randomPitch;
+        [ShowIf("_randomPitch")]
+        [Range(0f, 0.5f)]
+        [SerializeField] private float _randomPitchRange = 0.1f;
 
         [Header("Spatial")]
         [SerializeField] private float _maxHearDistance = 500f;
@@ -17,6 +23,8 @@ namespace Game.Core
         public AudioClip AudioClip => _audioClip;
         public float Volume => _volume;
         public bool IsLooping => _isLooping;
+        public bool RandomPitch => _randomPitch;
+        public float RandomPitchRange => _randomPitchRange;
         public float MaxHearDistance => _maxHearDistance;
     }
 }
