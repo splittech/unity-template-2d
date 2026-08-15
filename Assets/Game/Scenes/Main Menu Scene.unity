@@ -284,7 +284,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 691586167}
+  - {fileID: 277371600}
   m_Father: {fileID: 224704293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -612,8 +614,6 @@ RectTransform:
   m_Children:
   - {fileID: 530771528}
   - {fileID: 37155730}
-  - {fileID: 691586167}
-  - {fileID: 277371600}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -702,7 +702,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 224704293}
+    m_TransformParent: {fileID: 37155730}
     m_Modifications:
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_Pivot.x
@@ -730,11 +730,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1000
+      value: 920
       objectReference: {fileID: 0}
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -300
+      value: 780
       objectReference: {fileID: 0}
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2084,7 +2084,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6839680499944101690, guid: 6d4af2b8b9f54414d8ce560777ac6baa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1223149926}
   m_SourcePrefab: {fileID: 100100000, guid: 6d4af2b8b9f54414d8ce560777ac6baa, type: 3}
 --- !u!224 &1223149923 stripped
 RectTransform:
@@ -2096,6 +2099,32 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6839680499944101690, guid: 6d4af2b8b9f54414d8ce560777ac6baa, type: 3}
   m_PrefabInstance: {fileID: 1223149922}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1223149925 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7744660038472733418, guid: 6d4af2b8b9f54414d8ce560777ac6baa, type: 3}
+  m_PrefabInstance: {fileID: 1223149922}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223149924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1223149926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223149924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f93954d0e61864591d063679c23317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.MainMenu::Game.MainMenu.SwitchSceneButton
+  button: {fileID: 1223149925}
+  sceneToSwitch: {fileID: 11400000, guid: 3c08c64e7404b0842a1f6835001b0a9c, type: 2}
+  loadingScreenDescription: Loading gameplay scene...
 --- !u!1 &1365668443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2995,7 +3024,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 224704293}
+    m_TransformParent: {fileID: 37155730}
     m_Modifications:
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_Pivot.x
@@ -3023,11 +3052,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1000
+      value: 920
       objectReference: {fileID: 0}
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -300
+      value: 780
       objectReference: {fileID: 0}
     - target: {fileID: 2521198624049663767, guid: 9d940946cea4e314f8d9a791b7a4df9e, type: 3}
       propertyPath: m_LocalPosition.x
