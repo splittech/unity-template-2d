@@ -291,6 +291,6 @@ MonoBehaviour:
   _hoverAnimationScale: 1.1
   _hoverAnimationDuration: 0.3
   _hoverAnimationEase: 27
-  _clickAnimationScale: 1.2
+  _clickAnimationScale: 0.9
   _clickAnimationDuration: 0.2
   _clickAnimationEase: 27

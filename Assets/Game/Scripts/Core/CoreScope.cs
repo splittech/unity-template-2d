@@ -9,6 +9,9 @@ namespace Game.Core
         [Header("Loading Screen")]
         [SerializeField] private LoadingScreen _loadingScreen;
 
+        [Header("Logging Service")]
+        [SerializeField] private LoggingServiceConfig _loggingServiceConfig;
+
         [Header("Scene Service")]
         [SerializeField] private SceneServiceConfig _sceneServiceConfig;
 
@@ -30,6 +33,11 @@ namespace Game.Core
 
             // Application Service
             builder.Register<ApplicationService>(Lifetime.Singleton);
+
+            // Logging Service
+            builder.Register<ILoggingService, LoggingService>(Lifetime.Singleton);
+            builder.Register<LoggerFactory>(Lifetime.Singleton);
+            builder.RegisterInstance(_loggingServiceConfig);
 
             // Scene Service
             builder.Register<SceneService>(Lifetime.Singleton);

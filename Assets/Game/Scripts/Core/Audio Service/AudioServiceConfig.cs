@@ -7,7 +7,7 @@ using UnityEngine.Audio;
 namespace Game.Core
 {
     [AlchemySerialize]
-    [CreateAssetMenu(fileName = "Audio Service Config", menuName = "Game/Configs/Audio Service/Audio Service Config", order = 0)]
+    [CreateAssetMenu(fileName = "Audio Service Config", menuName = "Game/Configs/Audio Service Config", order = 0)]
     public partial class AudioServiceConfig : ScriptableObject
     {
         [Header("Debug")]

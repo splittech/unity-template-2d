@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Game.Core.Tests.Doubles;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Game.Core.Tests.Editor
 {
@@ -15,7 +16,9 @@ namespace Game.Core.Tests.Editor
         private SceneMetaAsset initialPersistentScene;
         private SceneMetaAsset gameplayScene;
         private TestSceneServiceConfig config;
+        private LoggingServiceConfig loggingConfig;
         private MockSceneLoader loader;
+        private ILoggingService loggingService;
         private SceneService service;
 
         [SetUp]
@@ -28,7 +31,10 @@ namespace Game.Core.Tests.Editor
             config = CreateConfig(coreScene, initialPersistentScene, gameplayScene);
 
             loader = new MockSceneLoader();
-            service = new SceneService(config, loader);
+
+            loggingConfig = ScriptableObject.CreateInstance<LoggingServiceConfig>();
+            loggingService = new MockLoggingService();
+            service = new SceneService(config, loggingService, loader);
         }
 
         [TearDown]
