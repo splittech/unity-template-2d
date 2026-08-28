@@ -35,9 +35,11 @@ namespace Game.Core
         /// </summary>
         /// <param name="value"></param>
         /// <exception cref="NotSupportedException"></exception>
-        void IProgress<float>.Report(float value) =>
+        void IProgress<float>.Report(float value)
+        {
             throw new NotSupportedException(
                 $"{nameof(CompositeProgress)} aggregates only sub-progresses created via {nameof(CreateSubProgress)}.");
+        }
 
         public IProgress<float> CreateSubProgress(float weight = 1)
         {

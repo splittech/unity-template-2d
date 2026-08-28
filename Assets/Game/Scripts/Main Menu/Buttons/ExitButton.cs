@@ -25,7 +25,7 @@ namespace Game.MainMenu
 
         private void OnButtonClicked()
         {
-            _applicationService.ExitGame();
+            _applicationService.QuitGame();
         }
     }
 }

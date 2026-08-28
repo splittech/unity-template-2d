@@ -16,6 +16,7 @@ namespace Game.Core.Tests.Editor
 
         private MockAddressablesLoader loader;
         private AddressablesServiceConfig config;
+        private ILoggingService loggingService;
         private AddressablesService service;
         private AddressablesPackReference packReference;
         private AddressablesPackDefinition definition;
@@ -25,7 +26,8 @@ namespace Game.Core.Tests.Editor
         {
             loader = new MockAddressablesLoader();
             config = ScriptableObject.CreateInstance<AddressablesServiceConfig>();
-            service = new AddressablesService(config, loader);
+            loggingService = new MockLoggingService();
+            service = new AddressablesService(config, loggingService, loader);
             packReference = new AddressablesPackReference(PackGuid);
             definition = new AddressablesPackDefinition(
                 PackId,

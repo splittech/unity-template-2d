@@ -720,6 +720,7 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _loadingScreen: {fileID: 1746993249}
+  _loggingServiceConfig: {fileID: 11400000, guid: 8fa86aa88ec46ff4f9519eac851581b4, type: 2}
   _sceneServiceConfig: {fileID: 11400000, guid: c8e897c4339b8fc4cbc8017d989d9600, type: 2}
   _audioServiceConfig: {fileID: 11400000, guid: 698714f6e40d06344bff1469486d32e7, type: 2}
   _musicPlayer: {fileID: 924378565}

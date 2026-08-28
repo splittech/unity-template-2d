@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Inspector;
@@ -15,9 +14,22 @@ namespace Game.Core
 {
     public abstract class SceneServiceConfig : ScriptableObject
     {
-        [Header("Debug")]
-        [SerializeField] private bool _enableLogger;
+#if UNITY_EDITOR
+        [BoxGroup("Open Only Core Scene")]
+        [Button]
+        private void OpenOnlyCoreScene()
+        {
+            RecreateAllScenesList();
 
+            AllScenes.ForEach(sceneAsset =>
+            {
+                Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
+                EditorSceneManager.CloseScene(scene, true);
+            });
+
+            EditorSceneManager.OpenScene(_coreScene.SceneReference.Path);
+        }
+#endif
         [Header("Core Scene")]
         [SerializeField] private SceneMetaAsset _coreScene;
 
@@ -25,19 +37,12 @@ namespace Game.Core
 
         public SceneMetaAsset CoreScene => _coreScene;
         public List<SceneMetaAsset> AllScenes => _allScenes.ToList();
-        public bool EnableLogger => _enableLogger;
 
         public void RecreateAllScenesList()
         {
             _allScenes.Clear();
             _allScenes.Add(_coreScene);
             FillAllSceneList(_allScenes);
-            ValidateAllScenesList();
-        }
-
-        public List<SceneMetaAsset> GetAllScenes()
-        {
-            return _allScenes.ToList();
         }
 
         public List<SceneMetaAsset> GetAllScenesExceptCore()
@@ -56,32 +61,5 @@ namespace Game.Core
         }
 
         protected abstract void FillAllSceneList(List<SceneMetaAsset> allScenes);
-
-        private void ValidateAllScenesList()
-        {
-            _allScenes.ForEach(scene => SceneMetaAsset.Validate(scene));
-
-            if (_allScenes.Distinct().Count() != _allScenes.Count)
-                throw new InvalidOperationException("Scene list contains duplicates.");
-
-            GameLogger.Log($"SceneServiceConfig '{name}': Scene list validation is successful.");
-        }
-
-#if UNITY_EDITOR
-        [BoxGroup("Open Only Core Scene")]
-        [Button]
-        private void OpenOnlyCoreScene()
-        {
-            RecreateAllScenesList();
-
-            GetAllScenes().ForEach(sceneAsset =>
-            {
-                Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
-                EditorSceneManager.CloseScene(scene, true);
-            });
-
-            EditorSceneManager.OpenScene(_coreScene.SceneReference.Path);
-        }
-#endif
     }
 }
