@@ -1,12 +1,14 @@
+using System;
+
 namespace Game.Core
 {
     public class FileLogger : GameLogger
     {
-        public FileLogger(LoggingServiceConfig.ChannelConfig config) : base(config) { }
+        public FileLogger(LogChannelConfig config) : base(config) { }
 
         public override void Log(string message)
         {
-            // Pass.
+            throw new NotSupportedException();
         }
     }
 }

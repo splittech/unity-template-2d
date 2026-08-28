@@ -7,7 +7,7 @@ namespace Game.Core
         private readonly LoggingServiceConfig _config;
         private readonly LoggerFactory _loggerFactory;
 
-        private Dictionary<LoggingChannel, GameLogger> _loggers = new();
+        private readonly Dictionary<LoggingChannel, GameLogger> _loggers = new();
 
         public LoggingService(LoggingServiceConfig config, LoggerFactory loggerFactory)
         {
@@ -27,10 +27,10 @@ namespace Game.Core
 
         private void CreateLoggers()
         {
-            foreach (var channel in _config.Channels)
+            foreach (var channel in _config.LogChannels)
             {
                 LoggingChannel loggingChannel = channel.Key;
-                LoggingServiceConfig.ChannelConfig channelConfig = channel.Value;
+                LogChannelConfig channelConfig = channel.Value;
 
                 _loggers.Add(loggingChannel, _loggerFactory.Create(channelConfig));
             }

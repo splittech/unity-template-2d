@@ -14,9 +14,22 @@ namespace Game.Core
 {
     public abstract class SceneServiceConfig : ScriptableObject
     {
-        [Header("Debug")]
-        [SerializeField] private bool _enableLogger;
+#if UNITY_EDITOR
+        [BoxGroup("Open Only Core Scene")]
+        [Button]
+        private void OpenOnlyCoreScene()
+        {
+            RecreateAllScenesList();
 
+            AllScenes.ForEach(sceneAsset =>
+            {
+                Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
+                EditorSceneManager.CloseScene(scene, true);
+            });
+
+            EditorSceneManager.OpenScene(_coreScene.SceneReference.Path);
+        }
+#endif
         [Header("Core Scene")]
         [SerializeField] private SceneMetaAsset _coreScene;
 
@@ -24,7 +37,6 @@ namespace Game.Core
 
         public SceneMetaAsset CoreScene => _coreScene;
         public List<SceneMetaAsset> AllScenes => _allScenes.ToList();
-        public bool EnableLogger => _enableLogger;
 
         public void RecreateAllScenesList()
         {
@@ -49,22 +61,5 @@ namespace Game.Core
         }
 
         protected abstract void FillAllSceneList(List<SceneMetaAsset> allScenes);
-
-#if UNITY_EDITOR
-        [BoxGroup("Open Only Core Scene")]
-        [Button]
-        private void OpenOnlyCoreScene()
-        {
-            RecreateAllScenesList();
-
-            AllScenes.ForEach(sceneAsset =>
-            {
-                Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
-                EditorSceneManager.CloseScene(scene, true);
-            });
-
-            EditorSceneManager.OpenScene(_coreScene.SceneReference.Path);
-        }
-#endif
     }
 }

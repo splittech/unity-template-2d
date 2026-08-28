@@ -6,7 +6,7 @@ namespace Game.Core
     {
         private readonly List<GameLogger> _loggers;
 
-        public CompositeLogger(LoggingServiceConfig.ChannelConfig config, List<GameLogger> loggers) : base(config)
+        public CompositeLogger(LogChannelConfig config, List<GameLogger> loggers) : base(config)
         {
             _loggers = loggers;
         }

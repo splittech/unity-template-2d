@@ -2,9 +2,9 @@ namespace Game.Core
 {
     public abstract class GameLogger
     {
-        protected readonly LoggingServiceConfig.ChannelConfig _config;
+        protected readonly LogChannelConfig _config;
 
-        protected GameLogger(LoggingServiceConfig.ChannelConfig config)
+        protected GameLogger(LogChannelConfig config)
         {
             _config = config;
         }

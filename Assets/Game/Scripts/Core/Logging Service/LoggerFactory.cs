@@ -4,7 +4,7 @@ namespace Game.Core
 {
     public class LoggerFactory
     {
-        public GameLogger Create(LoggingServiceConfig.ChannelConfig channelConfig)
+        public GameLogger Create(LogChannelConfig channelConfig)
         {
             List<GameLogger> loggers = new();
 
@@ -13,6 +13,9 @@ namespace Game.Core
 
             if (channelConfig.LoggerTypes.HasFlag(LoggerTypes.FileLogger))
                 loggers.Add(new FileLogger(channelConfig));
+
+            if (channelConfig.LoggerTypes.HasFlag(LoggerTypes.ServerLogger))
+                loggers.Add(new ServerLogger(channelConfig));
 
             if (loggers.Count == 0)
                 return new EmptyLogger(channelConfig);

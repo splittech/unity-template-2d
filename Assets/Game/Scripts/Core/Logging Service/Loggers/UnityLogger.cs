@@ -5,7 +5,7 @@ namespace Game.Core
 {
     public class UnityLogger : GameLogger
     {
-        public UnityLogger(LoggingServiceConfig.ChannelConfig config) : base(config) { }
+        public UnityLogger(LogChannelConfig config) : base(config) { }
 
         public override void Log(string message)
         {
