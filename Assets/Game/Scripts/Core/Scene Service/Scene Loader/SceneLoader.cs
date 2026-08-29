@@ -15,6 +15,12 @@ namespace Game.Core
 
         public async UniTask LoadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
+            // Unity scene loading cannot be cancelled after it starts.
+            // Check cancellation only before creating AsyncOperation.
+            ct.ThrowIfCancellationRequested();
+
+            progress ??= EmptyProgress<float>.Instance;
+
             AsyncOperation operation = SceneManager.LoadSceneAsync(
                 sceneAsset.SceneReference.Name, LoadSceneMode.Additive);
 
@@ -34,7 +40,7 @@ namespace Game.Core
                     if (operation.progress >= UnitySceneReadyProgress)
                         operation.allowSceneActivation = true;
 
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    await UniTask.Yield(PlayerLoopTiming.Update, CancellationToken.None);
                 }
             }
             finally
@@ -47,6 +53,12 @@ namespace Game.Core
 
         public UniTask UnloadSceneAsync(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct)
         {
+            // Unity scene unloading cannot be cancelled after it starts.
+            // Check cancellation only before creating AsyncOperation.
+            ct.ThrowIfCancellationRequested();
+
+            progress ??= EmptyProgress<float>.Instance;
+
             Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
 
             if (!scene.IsValid() || !scene.isLoaded)
@@ -63,7 +75,7 @@ namespace Game.Core
                 return UniTask.CompletedTask;
             }
 
-            return operation.ToUniTask(progress, PlayerLoopTiming.Update, ct);
+            return operation.ToUniTask(progress, PlayerLoopTiming.Update, CancellationToken.None);
         }
     }
 }

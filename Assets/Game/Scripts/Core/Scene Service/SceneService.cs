@@ -36,8 +36,6 @@ namespace Game.Core
             if (_loadedScenes.Contains(sceneToLoad))
                 throw new ArgumentException($"Scene with SceneMetaAsset '{sceneToLoad.name}' is already loaded.");
 
-            progress ??= new ImmediateProgress<float>(_ => { });
-
             _logger.Log($"Load scene with SceneMetaAsset '{sceneToLoad.name}'.");
 
             await _sceneLoader.LoadSceneAsync(sceneToLoad, progress, ct);
@@ -55,8 +53,6 @@ namespace Game.Core
 
             if (!_loadedScenes.Contains(sceneToUnload))
                 throw new ArgumentException($"Scene with SceneMetaAsset '{sceneToUnload.name}' is not loaded.");
-
-            progress ??= new ImmediateProgress<float>(_ => { });
 
             _logger.Log($"Unload scene with SceneMetaAsset '{sceneToUnload.name}'.");
 

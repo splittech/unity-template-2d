@@ -29,7 +29,7 @@ namespace Game.Core.Tests.Doubles
             SceneServiceConfig config = ScriptableObject.CreateInstance<SceneServiceConfig>();
 
             config.CoreScene = coreScene == null ? Create.SceneMetaAsset() : coreScene;
-            config.OtherScenes = otherScenes ?? new List<SceneMetaAsset> { Create.SceneMetaAsset() };
+            config.OtherScenes = otherScenes ?? new List<SceneMetaAsset>();
 
             return config;
         }
