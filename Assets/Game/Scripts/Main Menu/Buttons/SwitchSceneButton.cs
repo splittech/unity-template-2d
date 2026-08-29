@@ -33,7 +33,8 @@ namespace Game.MainMenu
             loadingScreen.SetProgressDescription(loadingScreenDescription);
             await loadingScreen.Show(ct);
 
-            await sceneService.SwitchScene(sceneToSwitch, loadingScreen.Progress, ct);
+            await sceneService.UnloadNonPersistentScenes();
+            await sceneService.LoadScene(sceneToSwitch, loadingScreen.Progress, ct);
 
             await loadingScreen.Hide(ct);
         }

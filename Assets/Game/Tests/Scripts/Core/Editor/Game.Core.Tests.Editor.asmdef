@@ -8,7 +8,8 @@
         "Unity.Addressables",
         "UniTask",
         "Game.Core",
-        "Game.Core.Tests.Doubles"
+        "Game.Core.Tests.Doubles",
+        "Eflatun.SceneReference"
     ],
     "includePlatforms": [
         "Editor"

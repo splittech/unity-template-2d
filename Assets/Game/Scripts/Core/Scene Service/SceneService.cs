@@ -12,7 +12,9 @@ namespace Game.Core
         private readonly ISceneLoader _sceneLoader;
         private readonly GameLogger _logger;
 
-        public SceneServiceConfig Config => _config;
+        private readonly List<SceneMetaAsset> _loadedScenes = new();
+
+        public IReadOnlyList<SceneMetaAsset> LoadedScenes => _loadedScenes;
 
         public SceneService(SceneServiceConfig config, ILoggingService loggingService, ISceneLoader sceneLoader)
         {
@@ -21,51 +23,105 @@ namespace Game.Core
 
             _logger = loggingService.GetLogger(LoggingChannel.SceneService);
 
-            config.RecreateAllScenesList();
-            ValidateAllScenesList();
+            SceneServiceValidator.ValidateSceneList(_config);
         }
 
-        public async UniTask SwitchScene(SceneMetaAsset sceneAsset, IProgress<float> progress, CancellationToken ct = default)
+        public async UniTask LoadScene(
+            SceneMetaAsset sceneToLoad,
+            IProgress<float> progress = null,
+            CancellationToken ct = default)
         {
-            _logger.Log($"Switch scene to SceneMetaAsset '{sceneAsset.name}'.");
+            SceneServiceValidator.ValidateSceneMetaAsset(sceneToLoad);
 
-            SceneMetaAsset.Validate(sceneAsset);
+            if (_loadedScenes.Contains(sceneToLoad))
+                throw new ArgumentException($"Scene with SceneMetaAsset '{sceneToLoad.name}' is already loaded.");
 
-            CompositeProgress compositeProgress = new(value => progress.Report(value));
-            IProgress<float> unloadProgress = compositeProgress.CreateSubProgress();
-            IProgress<float> loadProgress = compositeProgress.CreateSubProgress();
+            progress ??= new ImmediateProgress<float>(_ => { });
 
-            await UnloadAllNonpersistentScenes(unloadProgress, ct);
-            await _sceneLoader.LoadSceneAsync(sceneAsset, loadProgress, ct);
-            progress.Report(1f);
+            _logger.Log($"Load scene with SceneMetaAsset '{sceneToLoad.name}'.");
+
+            await _sceneLoader.LoadSceneAsync(sceneToLoad, progress, ct);
+            _loadedScenes.Add(sceneToLoad);
+
+            progress?.Report(1f);
         }
 
-        public async UniTask LoadInitialScenes(IProgress<float> progress, CancellationToken ct = default)
+        public async UniTask UnloadScene(
+            SceneMetaAsset sceneToUnload,
+            IProgress<float> progress = null,
+            CancellationToken ct = default)
         {
-            _logger.Log($"Load initial scenes.");
+            SceneServiceValidator.ValidateSceneMetaAsset(sceneToUnload);
 
-            List<SceneMetaAsset> scenesToLoad = _config.GetAllInitialScenes();
-            List<UniTask> tasks = _sceneLoader.LoadManyScenesAsync(scenesToLoad, progress, ct);
+            if (!_loadedScenes.Contains(sceneToUnload))
+                throw new ArgumentException($"Scene with SceneMetaAsset '{sceneToUnload.name}' is not loaded.");
 
+            progress ??= new ImmediateProgress<float>(_ => { });
+
+            _logger.Log($"Unload scene with SceneMetaAsset '{sceneToUnload.name}'.");
+
+            await _sceneLoader.UnloadSceneAsync(sceneToUnload, progress, ct);
+            _loadedScenes.Remove(sceneToUnload);
+
+            progress?.Report(1f);
+        }
+
+        public async UniTask LoadSceneList(
+            List<SceneMetaAsset> scenesToLoad,
+            IProgress<float> progress = null,
+            CancellationToken ct = default)
+        {
+            _logger.Log("Load scene list.");
+
+            CompositeProgress compositeProgress = new(value => progress?.Report(value));
+
+            List<UniTask> tasks = scenesToLoad
+                .Select(scene => LoadScene(scene, compositeProgress.CreateSubProgress(), ct))
+                .ToList();
+
+            compositeProgress.EnableUpdate();
             await UniTask.WhenAll(tasks);
-            progress.Report(1f);
+
+            progress?.Report(1f);
         }
 
-        private async UniTask UnloadAllNonpersistentScenes(IProgress<float> progress, CancellationToken ct = default)
+        public async UniTask UnloadSceneList(
+            List<SceneMetaAsset> scenesToUnload,
+            IProgress<float> progress = null,
+            CancellationToken ct = default)
         {
-            List<SceneMetaAsset> scenesToUnload = _config.GetAllNonPersistentScenes();
-            List<UniTask> tasks = _sceneLoader.UnloadManyScenesAsync(scenesToUnload, progress, ct);
+            _logger.Log("Unload scene list.");
 
+            CompositeProgress compositeProgress = new(value => progress?.Report(value));
+
+            List<UniTask> tasks = scenesToUnload
+                .Select(scene => UnloadScene(scene, compositeProgress.CreateSubProgress(), ct))
+                .ToList();
+
+            compositeProgress.EnableUpdate();
             await UniTask.WhenAll(tasks);
-            progress.Report(1f);
+
+            progress?.Report(1f);
         }
 
-        private void ValidateAllScenesList()
+        public UniTask LoadInitialScenes(IProgress<float> progress = null, CancellationToken ct = default)
         {
-            _config.AllScenes.ForEach(scene => SceneMetaAsset.Validate(scene));
+            _logger.Log("Load initial scenes.");
 
-            if (_config.AllScenes.Distinct().Count() != _config.AllScenes.Count)
-                throw new InvalidOperationException("Scene list contains duplicates.");
+            List<SceneMetaAsset> scenesToLoad = _config.InitialScenes;
+
+            return LoadSceneList(scenesToLoad, progress, ct);
+        }
+
+        public UniTask UnloadNonPersistentScenes(IProgress<float> progress = null, CancellationToken ct = default)
+        {
+            _logger.Log("Unload nonpersistent scenes.");
+
+            List<SceneMetaAsset> scenesToUnload = _config.NonPersistentScenes
+                .Where(scene => _loadedScenes.Contains(scene))
+                .ToList();
+
+            return UnloadSceneList(scenesToUnload, progress, ct);
         }
     }
 }

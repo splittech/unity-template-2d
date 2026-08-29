@@ -12,54 +12,37 @@ using UnityEditor.SceneManagement;
 
 namespace Game.Core
 {
-    public abstract class SceneServiceConfig : ScriptableObject
+    [CreateAssetMenu(menuName = "Game/Configs/Scene Service Config", order = 0)]
+    public class SceneServiceConfig : ScriptableObject
     {
+        public SceneMetaAsset CoreScene;
+        public List<SceneMetaAsset> OtherScenes;
+
+        public List<SceneMetaAsset> AllScenes =>
+            OtherScenes.Append(CoreScene).ToList();
+
+        public List<SceneMetaAsset> NonPersistentScenes =>
+            OtherScenes.Where(scene => !scene.Persistent).ToList();
+
+        public List<SceneMetaAsset> InitialScenes =>
+            OtherScenes.Where(scene => scene.Initial).ToList();
+
 #if UNITY_EDITOR
+
         [BoxGroup("Open Only Core Scene")]
         [Button]
         private void OpenOnlyCoreScene()
         {
-            RecreateAllScenesList();
-
             AllScenes.ForEach(sceneAsset =>
             {
                 Scene scene = SceneManager.GetSceneByName(sceneAsset.SceneReference.Name);
                 EditorSceneManager.CloseScene(scene, true);
             });
 
-            EditorSceneManager.OpenScene(_coreScene.SceneReference.Path);
+            EditorSceneManager.OpenScene(CoreScene.SceneReference.Path);
         }
+
 #endif
-        [Header("Core Scene")]
-        [SerializeField] private SceneMetaAsset _coreScene;
 
-        private readonly List<SceneMetaAsset> _allScenes = new();
-
-        public SceneMetaAsset CoreScene => _coreScene;
-        public List<SceneMetaAsset> AllScenes => _allScenes.ToList();
-
-        public void RecreateAllScenesList()
-        {
-            _allScenes.Clear();
-            _allScenes.Add(_coreScene);
-            FillAllSceneList(_allScenes);
-        }
-
-        public List<SceneMetaAsset> GetAllScenesExceptCore()
-        {
-            return _allScenes.Where(scene => scene != _coreScene).ToList();
-        }
-
-        public List<SceneMetaAsset> GetAllNonPersistentScenes()
-        {
-            return _allScenes.Where(scene => !scene.Persistent && scene != _coreScene).ToList();
-        }
-
-        public List<SceneMetaAsset> GetAllInitialScenes()
-        {
-            return _allScenes.Where(scene => scene.Initial && scene != _coreScene).ToList();
-        }
-
-        protected abstract void FillAllSceneList(List<SceneMetaAsset> allScenes);
     }
 }

@@ -24,7 +24,7 @@ namespace Game.Core
             _handler = handler;
             _updateEnabled = autoEnableUpdate;
 
-            _subProgressFactory = subProgressFactory ?? (h => new Progress<float>(h));
+            _subProgressFactory = subProgressFactory ?? (h => new ImmediateProgress<float>(h));
 
             _subProgressValues = new List<float>();
             _subProgressWeights = new List<float>();

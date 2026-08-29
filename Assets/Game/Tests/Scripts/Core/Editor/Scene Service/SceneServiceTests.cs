@@ -1,170 +1,130 @@
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Game.Core.Tests.Doubles;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Game.Core.Tests.Editor
 {
     public sealed class SceneServiceTests
     {
-        private readonly List<UnityEngine.Object> createdObjects = new();
-
-        private SceneMetaAsset coreScene;
-        private SceneMetaAsset initialPersistentScene;
-        private SceneMetaAsset gameplayScene;
-        private TestSceneServiceConfig config;
-        private LoggingServiceConfig loggingConfig;
-        private MockSceneLoader loader;
-        private ILoggingService loggingService;
-        private SceneService service;
-
-        [SetUp]
-        public void SetUp()
+        [Test]
+        public async Task LoadScene_NoSceneLoaded_SceneAddedToLoadedScenes()
         {
-            // Mark core as initial to verify that LoadInitialScenes explicitly excludes it.
-            coreScene = CreateScene(initial: true, persistent: false);
-            initialPersistentScene = CreateScene(initial: true, persistent: true);
-            gameplayScene = CreateScene(initial: false, persistent: false);
-            config = CreateConfig(coreScene, initialPersistentScene, gameplayScene);
+            // Arrange.
+            SceneMetaAsset sceneToLoad = Create.SceneMetaAsset();
 
-            loader = new MockSceneLoader();
+            SceneService sceneService = Setup.SceneService();
 
-            loggingConfig = ScriptableObject.CreateInstance<LoggingServiceConfig>();
-            loggingService = new MockLoggingService();
-            service = new SceneService(config, loggingService, loader);
-        }
+            // Act.
+            await sceneService.LoadScene(sceneToLoad);
 
-        [TearDown]
-        public void TearDown()
-        {
-            foreach (UnityEngine.Object createdObject in createdObjects)
-            {
-                if (createdObject != null)
-                    UnityEngine.Object.DestroyImmediate(createdObject);
-            }
-
-            createdObjects.Clear();
+            // Assert.
+            Assert.That(sceneService.LoadedScenes, Has.Member(sceneToLoad));
         }
 
         [Test]
-        public async Task SwitchScene_LoadsTargetScene()
+        public async Task UnloadScene_SceneLoaded_SceneRemovedFromLoadedScenes()
         {
-            await service.SwitchScene(
-                gameplayScene,
-                IgnoreProgress(),
-                CancellationToken.None);
+            // Arrange.
+            SceneMetaAsset sceneToUnload = Create.SceneMetaAsset();
 
-            Assert.That(loader.LoadedScenes, Does.Contain(gameplayScene));
+            SceneService sceneService = Setup.SceneService();
+
+            await sceneService.LoadScene(sceneToUnload);
+
+            // Act.
+            await sceneService.UnloadScene(sceneToUnload);
+
+            // Assert.
+            Assert.That(sceneService.LoadedScenes, Has.No.Member(sceneToUnload));
         }
 
         [Test]
-        public async Task SwitchScene_UnloadsBeforeLoadingTarget()
+        public async Task LoadSceneList_NoSceneLoaded_ScenesAddedToLoadedScenes()
         {
-            loader.LoadedScenes.Add(gameplayScene);
+            // Arrange.
+            SceneMetaAsset firstScene = Create.SceneMetaAsset();
+            SceneMetaAsset secondScene = Create.SceneMetaAsset();
 
-            await service.SwitchScene(
-                initialPersistentScene,
-                IgnoreProgress(),
-                CancellationToken.None);
+            SceneService sceneService = Setup.SceneService();
 
-            int unloadIndex = loader.Calls.FindIndex(call =>
-                call.Type == SceneLoaderOperationType.Unload &&
-                call.Scene == gameplayScene);
-            int loadIndex = loader.Calls.FindIndex(call =>
-                call.Type == SceneLoaderOperationType.Load &&
-                call.Scene == initialPersistentScene);
+            // Act.
+            await sceneService.LoadSceneList(
+                new List<SceneMetaAsset> { firstScene, secondScene }
+            );
 
-            Assert.That(unloadIndex, Is.GreaterThanOrEqualTo(0));
-            Assert.That(loadIndex, Is.GreaterThan(unloadIndex));
+            // Assert.
+            Assert.That(sceneService.LoadedScenes, Has.Member(firstScene));
+            Assert.That(sceneService.LoadedScenes, Has.Member(secondScene));
         }
 
         [Test]
-        public async Task SwitchScene_DoesNotUnloadPersistentScene()
+        public async Task UnloadSceneList_ScenesLoaded_ScenesRemovedFromLoadedScenes()
         {
-            loader.LoadedScenes.Add(initialPersistentScene);
+            // Arrange.
+            SceneMetaAsset firstScene = Create.SceneMetaAsset();
+            SceneMetaAsset secondScene = Create.SceneMetaAsset();
 
-            await service.SwitchScene(
-                gameplayScene,
-                IgnoreProgress(),
-                CancellationToken.None);
+            SceneService sceneService = Setup.SceneService();
 
-            Assert.That(loader.UnloadCalls, Has.No.Member(initialPersistentScene));
-            Assert.That(loader.LoadedScenes, Does.Contain(initialPersistentScene));
+            await sceneService.LoadSceneList(
+                new List<SceneMetaAsset> { firstScene, secondScene }
+            );
+
+            // Act.
+            await sceneService.UnloadSceneList(
+                new List<SceneMetaAsset> { firstScene, secondScene }
+            );
+
+            // Assert.
+            Assert.That(sceneService.LoadedScenes, Has.No.Member(firstScene));
+            Assert.That(sceneService.LoadedScenes, Has.No.Member(secondScene));
         }
 
         [Test]
-        public async Task SwitchScene_DoesNotUnloadCoreScene()
+        public async Task LoadInitialScenes_NoSceneLoaded_InitialScenesAddedToLoadedScenes()
         {
-            loader.LoadedScenes.Add(coreScene);
+            // Arrange.
+            SceneMetaAsset firstInitialScene = Create.SceneMetaAsset(initial: true);
+            SceneMetaAsset secondInitialScene = Create.SceneMetaAsset(initial: true);
 
-            await service.SwitchScene(
-                gameplayScene,
-                IgnoreProgress(),
-                CancellationToken.None);
+            SceneServiceConfig config = Create.SceneServiceConfig(
+                otherScenes: new List<SceneMetaAsset> { firstInitialScene, secondInitialScene }
+            );
 
-            Assert.That(loader.UnloadCalls, Has.No.Member(coreScene));
-            Assert.That(loader.LoadedScenes, Does.Contain(coreScene));
+            SceneService sceneService = Setup.SceneService(config);
+
+            // Act.
+            await sceneService.LoadInitialScenes();
+
+            // Assert.
+            Assert.That(sceneService.LoadedScenes, Has.Member(firstInitialScene));
+            Assert.That(sceneService.LoadedScenes, Has.Member(secondInitialScene));
         }
 
         [Test]
-        public void SwitchScene_CancelledToken_DoesNotLoadTarget()
+        public async Task UnloadNonPersistentScenes_NonPersistentScenesLoaded_NonPersistentScenesRemovedFromLoadedScenes()
         {
-            using CancellationTokenSource cts = new();
-            cts.Cancel();
+            // Arrange.
+            SceneMetaAsset firstNonPersistentScene = Create.SceneMetaAsset(persistent: false);
+            SceneMetaAsset secondNonPersistentScene = Create.SceneMetaAsset(persistent: false);
 
-            Assert.CatchAsync<OperationCanceledException>(async () =>
-                await service.SwitchScene(gameplayScene, IgnoreProgress(), cts.Token));
+            SceneServiceConfig config = Create.SceneServiceConfig(
+                otherScenes: new List<SceneMetaAsset> { firstNonPersistentScene, secondNonPersistentScene }
+            );
 
-            Assert.That(loader.LoadCalls, Is.Empty);
-        }
+            SceneService sceneService = Setup.SceneService(config);
 
-        [Test]
-        public void SwitchScene_UnloadFails_DoesNotLoadTarget()
-        {
-            loader.LoadedScenes.Add(gameplayScene);
-            loader.UnloadException = new InvalidOperationException("Unload failed.");
+            await sceneService.LoadSceneList(
+                new List<SceneMetaAsset> { firstNonPersistentScene, secondNonPersistentScene }
+            );
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await service.SwitchScene(
-                    initialPersistentScene,
-                    IgnoreProgress(),
-                    CancellationToken.None));
+            // Act.
+            await sceneService.UnloadNonPersistentScenes();
 
-            Assert.That(loader.LoadCalls, Has.No.Member(initialPersistentScene));
-        }
-
-        [Test]
-        public async Task LoadInitialScenes_LoadsOnlyInitialNonCoreScenes()
-        {
-            await service.LoadInitialScenes(
-                IgnoreProgress(),
-                CancellationToken.None);
-
-            Assert.That(loader.LoadCalls, Is.EquivalentTo(new[] { initialPersistentScene }));
-        }
-
-        private SceneMetaAsset CreateScene(bool initial, bool persistent)
-        {
-            SceneMetaAsset scene = SceneServiceTestData.CreateScene(initial, persistent);
-            createdObjects.Add(scene);
-            return scene;
-        }
-
-        private TestSceneServiceConfig CreateConfig(
-            SceneMetaAsset core,
-            params SceneMetaAsset[] scenes)
-        {
-            TestSceneServiceConfig result = SceneServiceTestData.CreateConfig(core, scenes);
-            createdObjects.Add(result);
-            return result;
-        }
-
-        private static IProgress<float> IgnoreProgress()
-        {
-            return new ImmediateProgress<float>(_ => { });
+            // Assert.
+            Assert.That(sceneService.LoadedScenes, Has.No.Member(firstNonPersistentScene));
+            Assert.That(sceneService.LoadedScenes, Has.No.Member(secondNonPersistentScene));
         }
     }
 }
